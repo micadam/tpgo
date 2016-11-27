@@ -7,10 +7,6 @@ public class GoGameWindow extends JFrame {
 	GamePanel gamePanel;
 	StatusPanel statusPanel;
 	
-	private void initUI(){
-		this.add(statusPanel);
-		this.add(gamePanel);
-	}
 	
 	public Move getUserMove() {
 		Move move = new Move(-10, -10);
@@ -30,12 +26,19 @@ public class GoGameWindow extends JFrame {
 		return move;
 		
 	}
+	
+	
+	private void initUI(){
+		this.add(statusPanel);
+		this.add(gamePanel);
+		this.pack();
+		this.setVisible(true);
+	}
+	
 	public GoGameWindow(){
 		this.gamePanel = new GamePanel();
 		this.statusPanel = new StatusPanel();
 		
-		this.pack();
-		this.setVisible(true);
 		initUI();
 	}
 

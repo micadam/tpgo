@@ -18,24 +18,6 @@ public class StatusPanel extends JPanel {
 	
 	JLabel gameTime;
 
-	private void initUI() {
-		gameTime = new JLabel("DUMMYTEXT");
-		this.add(gameTime);
-		
-		managerLabel = new JLabel("DUMMYTEXT");
-		this.add(managerLabel);
-
-		passButton = new JButton("Pass");
-		this.add(passButton);
-		passButton.setEnabled(false);
-		territoriesButton = new JButton("Territories");
-		this.add(territoriesButton);
-		surrenderButton = new JButton("Surrender");
-		this.add(surrenderButton);
-		
-		this.setPreferredSize(new Dimension(600, 30));
-		this.setVisible(true);
-	}
 	
 	public void waitForMove(Move move) {
 		passButton.addActionListener(new ActionListener(){
@@ -53,7 +35,27 @@ public class StatusPanel extends JPanel {
 		passButton.setEnabled(true);
 	}
 	
+	private void initUI() {
+		gameTime = new JLabel("DUMMYTEXT");
+		this.add(gameTime);
+		
+		managerLabel = new JLabel("DUMMYTEXT");
+		this.add(managerLabel);
+		
+		passButton = new JButton("Pass");
+		this.add(passButton);
+		passButton.setEnabled(false);
+		territoriesButton = new JButton("Territories");
+		this.add(territoriesButton);
+		surrenderButton = new JButton("Surrender");
+		this.add(surrenderButton);
+		
+		this.setPreferredSize(new Dimension(600, 30));
+		this.setVisible(true);
+	}
+	
 	public StatusPanel() {
+		initUI();
 		
 	}
 
