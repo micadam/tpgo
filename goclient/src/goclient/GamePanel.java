@@ -3,8 +3,12 @@ package goclient;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class GamePanel extends JPanel {
 	private final int fieldSize=50;
@@ -13,6 +17,8 @@ public class GamePanel extends JPanel {
 	private int pawnSize=16;
 	private Color boardColor;
 	private int[][] board= new int[fieldCount][fieldCount];
+	MoveListener moveListener;
+	
 	public void makeMove(int x,int y,int color){
 		board[x][y]=color;
 	}
@@ -49,13 +55,56 @@ public class GamePanel extends JPanel {
 		setPreferredSize(new Dimension(size,size));
 		setSize(size,size);
 		boardColor= new Color(219,178,92);		//Brown
+		moveListener = new MoveListener(fieldSize,pawnSize, fieldCount);
 	}
 	
 	public void waitForMove(Move move) {
-	//TODO wszystko	
+		moveListener.setMove(move);
+		this.addMouseListener(moveListener);
+		
 	}
 	public void stopWaitingForMove() {
-		//TODO
+		this.removeMouseListener(moveListener);
 	}
+	
+}
+
+class MoveListener extends MouseAdapter {
+	private Move move;
+	private int fieldSize;
+	private int pawnSize;
+	private int fieldCount;
+	
+	@Override
+	public void mouseClicked(MouseEvent me) {
+		if( SwingUtilities.isLeftMouseButton(me) ) {			
+			int x = me.getX();
+			int y = me.getY();
+
+			for(int i = 0; i < fieldCount; i++) {		
+				for(int j = 0; j < fieldCount; j++) {
+					int boardX = 30 + i * fieldSize;
+					int boardY = 30 * j * fieldSize;
+					if(Point2D.distance(x, y, boardX, boardY) < pawnSize / 2) {
+						synchronized(move) {							
+							move.setX(i);
+							move.setY(j);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void setMove(Move move) {
+		this.move = move;
+	}
+	
+	public MoveListener(int fieldSize, int pawnSize, int fieldCount) {
+		this.fieldSize = fieldSize;
+		this.pawnSize = pawnSize;
+		this.fieldCount = fieldCount;
+	}
+	
 	
 }

@@ -14,6 +14,7 @@ public class StatusPanel extends JPanel {
 	
 	JButton surrenderButton;
 	JButton passButton;
+	PassListener passListener;
 	JButton territoriesButton;
 	
 	JLabel managerLabel;
@@ -22,19 +23,14 @@ public class StatusPanel extends JPanel {
 
 	
 	public void waitForMove(Move move) {
-		passButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent ae) {
-				synchronized(move) {					
-					move.setX(-1);
-					move.setY(-1);
-				}
-			}
-		});
+		passListener.setMove(move);
+		passButton.addActionListener(passListener);
 		passButton.setEnabled(true);
 	}
 	
 	public void stopWaitingForMove() {
-		passButton.setEnabled(true);
+		passButton.removeActionListener(passListener);
+		passButton.setEnabled(false);
 	}
 	
 	private void initUI() {
@@ -61,8 +57,23 @@ public class StatusPanel extends JPanel {
 	}
 	
 	public StatusPanel() {
+		passListener = new PassListener();
 		initUI();
 		
 	}
 
+}
+
+class PassListener implements ActionListener{
+	Move move;
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		synchronized(move) {					
+			move.setX(-1);
+			move.setY(-1);
+		}
+	}
+	public void setMove(Move move) {
+		this.move = move;
+	}
 }
