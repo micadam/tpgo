@@ -5,7 +5,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>510</x>
-      <y>0</y>
+      <y>50</y>
       <w>210</w>
       <h>70</h>
     </coordinates>
@@ -19,7 +19,7 @@
     <id>Relation</id>
     <coordinates>
       <x>710</x>
-      <y>20</y>
+      <y>70</y>
       <w>130</w>
       <h>150</h>
     </coordinates>
@@ -31,7 +31,7 @@ uses</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>920</x>
-      <y>410</y>
+      <y>460</y>
       <w>210</w>
       <h>70</h>
     </coordinates>
@@ -45,7 +45,7 @@ uses</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>560</x>
-      <y>410</y>
+      <y>460</y>
       <w>210</w>
       <h>70</h>
     </coordinates>
@@ -59,7 +59,7 @@ uses</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>830</x>
-      <y>300</y>
+      <y>350</y>
       <w>220</w>
       <h>130</h>
     </coordinates>
@@ -70,7 +70,7 @@ uses</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>650</x>
-      <y>300</y>
+      <y>350</y>
       <w>140</w>
       <h>130</h>
     </coordinates>
@@ -81,7 +81,7 @@ uses</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>120</x>
-      <y>140</y>
+      <y>190</y>
       <w>210</w>
       <h>150</h>
     </coordinates>
@@ -99,7 +99,7 @@ uses</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>200</x>
-      <y>20</y>
+      <y>70</y>
       <w>330</w>
       <h>140</h>
     </coordinates>
@@ -111,7 +111,7 @@ uses</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>710</x>
-      <y>150</y>
+      <y>200</y>
       <w>350</w>
       <h>160</h>
     </coordinates>
@@ -123,7 +123,6 @@ _GoManager_
 --
 + GoManager(window : GoGameWIndow()
 +makeMove(x : int, y : int) : int
-+getBoard(): int[][]</panel_attributes>
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -131,7 +130,7 @@ _GoManager_
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>400</y>
+      <y>450</y>
       <w>210</w>
       <h>70</h>
     </coordinates>
@@ -146,7 +145,7 @@ _GoManager_
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>280</y>
+      <y>330</y>
       <w>130</w>
       <h>140</h>
     </coordinates>
@@ -157,7 +156,7 @@ _GoManager_
     <id>UMLClass</id>
     <coordinates>
       <x>240</x>
-      <y>400</y>
+      <y>450</y>
       <w>210</w>
       <h>70</h>
     </coordinates>
@@ -172,7 +171,7 @@ _GoManager_
     <id>Relation</id>
     <coordinates>
       <x>260</x>
-      <y>280</y>
+      <y>330</y>
       <w>110</w>
       <h>140</h>
     </coordinates>
@@ -183,7 +182,7 @@ _GoManager_
     <id>UMLClass</id>
     <coordinates>
       <x>920</x>
-      <y>580</y>
+      <y>630</y>
       <w>210</w>
       <h>70</h>
     </coordinates>

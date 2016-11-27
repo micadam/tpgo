@@ -8,6 +8,10 @@ public class GoGameManagerRaw implements GoGameManager {
 
 	}
 	
+	public int[][] getBoard() {
+		return gameBoard;
+	}
+	
 	public int makeMove(int x, int y){
 		if(x < 0 || y < 0 || x > BOARD_SIZE ||  y > BOARD_SIZE || gameBoard[x][y] != 0) {
 			return -1;
