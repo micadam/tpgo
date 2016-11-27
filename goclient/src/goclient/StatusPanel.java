@@ -56,7 +56,7 @@ public class StatusPanel extends JPanel {
 		this.add(surrenderButton);
 		surrenderButton.setEnabled(false);
 		
-		this.setPreferredSize(new Dimension(600, 30));
+//		this.setPreferredSize(new Dimension(600, 30));
 		this.setVisible(true);
 	}
 	

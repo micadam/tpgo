@@ -7,7 +7,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
-	private final int fieldSize=20;
+	private final int fieldSize=50;
 	private final int fieldCount=19;				//zrobi żeby dało się zmienia		
 	private int size;
 	private int pawnSize=16;
@@ -23,7 +23,7 @@ public class GamePanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g){
 		g.setColor(boardColor);			
-		g.fillRect(fieldSize, fieldSize, size-fieldSize, size-fieldSize);
+		g.fillRect(0, 0, size + fieldSize, size + fieldSize);
 		g.setColor(Color.BLACK);
 		for(int i=1;i<=fieldCount;i++){		//kreski
 			g.drawLine(i*fieldSize, fieldSize, i*fieldSize, size-fieldSize);	//piopnowe
@@ -34,9 +34,10 @@ public class GamePanel extends JPanel {
 				if(board[x][y]!=0){
 					if(board[x][y]==1)
 						g.setColor(Color.WHITE);
-					else
+					else {						
 						g.setColor(Color.BLACK);
-					g.fillOval((x+1)*fieldSize, y*fieldSize, pawnSize, pawnSize);
+					}
+					g.fillOval(fieldSize + x * fieldSize - pawnSize/2, fieldSize + x * fieldSize - pawnSize/2, pawnSize, pawnSize);
 				}
 			}
 		}

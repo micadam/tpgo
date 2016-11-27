@@ -122,6 +122,7 @@ _GoManager_
 /the GUI understands and uses/
 --
 + GoManager(window : GoGameWIndow()
++ getBoard() : int [] []
 +makeMove(x : int, y : int) : int
 </panel_attributes>
     <additional_attributes/>
