@@ -11,7 +11,7 @@ public class GoClient {
 		goGameWindow.setVisible(true);
 		goGameWindow.pack();
 	}
-
+	
 	public static void main(String[] args){
 		GoClient goClient = new GoClient (new GoGameManagerRaw(), new GoGameWindow());
 	}

@@ -34,7 +34,7 @@ public class GoGameWindow extends JFrame {
 		setLayout(new BorderLayout());
 		this.add(statusPanel, BorderLayout.NORTH);
 		this.add(gamePanel, BorderLayout.SOUTH);
-		
+		this.setResizable(false);
 	}
 	
 	public GoGameWindow(){

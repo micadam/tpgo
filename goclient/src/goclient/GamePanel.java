@@ -14,13 +14,14 @@ public class GamePanel extends JPanel {
 	private final int fieldSize=50;
 	private final int fieldCount=19;				//zrobi żeby dało się zmienia		
 	private int size;
-	private int pawnSize=16;
+	private int pawnSize= 50;
 	private Color boardColor;
 	private int[][] board= new int[fieldCount][fieldCount];
 	MoveListener moveListener;
 	
 	public void makeMove(int x,int y,int color){
 		board[x][y]=color;
+		repaint();
 	}
 	public void setBoard(int[][] board){
 		this.board=board;
@@ -43,7 +44,7 @@ public class GamePanel extends JPanel {
 					else {						
 						g.setColor(Color.BLACK);
 					}
-					g.fillOval(fieldSize + x * fieldSize - pawnSize/2, fieldSize + x * fieldSize - pawnSize/2, pawnSize, pawnSize);
+					g.fillOval(fieldSize + x * fieldSize - pawnSize/2, fieldSize + y * fieldSize - pawnSize/2, pawnSize, pawnSize);
 				}
 			}
 		}
@@ -55,7 +56,9 @@ public class GamePanel extends JPanel {
 		setPreferredSize(new Dimension(size,size));
 		setSize(size,size);
 		boardColor= new Color(219,178,92);		//Brown
-		moveListener = new MoveListener(fieldSize,pawnSize, fieldCount);
+		moveListener = new MoveListener(this);
+		this.addMouseListener(moveListener);
+		moveListener.setMove (new Move(-100, -100));
 	}
 	
 	public void waitForMove(Move move) {
@@ -67,6 +70,16 @@ public class GamePanel extends JPanel {
 		this.removeMouseListener(moveListener);
 	}
 	
+	public int getFieldSize() {
+		return fieldSize;
+	}
+	public int getPawnSize() {
+		return pawnSize;
+	}
+	public int getFieldCount() {
+		return fieldCount;
+	}
+	
 }
 
 class MoveListener extends MouseAdapter {
@@ -74,23 +87,38 @@ class MoveListener extends MouseAdapter {
 	private int fieldSize;
 	private int pawnSize;
 	private int fieldCount;
+	GamePanel gamePanel;
 	
 	@Override
 	public void mouseClicked(MouseEvent me) {
-		if( SwingUtilities.isLeftMouseButton(me) ) {			
+		if( SwingUtilities.isLeftMouseButton(me) ) {		
 			int x = me.getX();
 			int y = me.getY();
+			
+			int xDifference = x % fieldSize;
+			int yDifference = y % fieldSize;
+			
+			if(x % fieldSize > fieldSize / 2) {
+				xDifference -= fieldSize;
+			}
+			if(y % fieldSize > fieldSize / 2) {
+				yDifference -= fieldSize;
+			}
 
-			for(int i = 0; i < fieldCount; i++) {		
-				for(int j = 0; j < fieldCount; j++) {
-					int boardX = 30 + i * fieldSize;
-					int boardY = 30 * j * fieldSize;
-					if(Point2D.distance(x, y, boardX, boardY) < pawnSize / 2) {
-						synchronized(move) {							
-							move.setX(i);
-							move.setY(j);
-						}
-					}
+			int closestX = x - xDifference;
+			int closestY = y - yDifference;
+			
+			if(closestX < fieldSize || closestY < fieldSize || closestX >= (fieldCount + 1)* fieldSize || closestY >= (fieldCount + 1) * fieldSize) {
+				return;
+			}
+			if(Point2D.distance(x, y, closestX, closestY) < pawnSize / 2) {
+				synchronized(move){			
+					closestX = closestX / fieldSize - 1;
+					closestY = closestY / fieldSize - 1;
+					move.setX(closestX);
+					move.setY(closestY);
+					gamePanel.makeMove(closestX, closestY, 1);
+					System.out.println("Placing piece on coordinates: " + closestX + ", " + closestY);
 				}
 			}
 		}
@@ -100,10 +128,11 @@ class MoveListener extends MouseAdapter {
 		this.move = move;
 	}
 	
-	public MoveListener(int fieldSize, int pawnSize, int fieldCount) {
-		this.fieldSize = fieldSize;
-		this.pawnSize = pawnSize;
-		this.fieldCount = fieldCount;
+	public MoveListener(GamePanel gamePanel) {
+		this.fieldSize = gamePanel.getFieldSize();
+		this.pawnSize = gamePanel.getPawnSize();
+		this.fieldCount = gamePanel.getFieldCount();
+		this.gamePanel = gamePanel;
 	}
 	
 	
