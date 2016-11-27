@@ -41,8 +41,9 @@ public class GoGameWindow extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.gamePanel = new GamePanel();
 		this.statusPanel = new StatusPanel();
-		
 		initUI();
+		this.setVisible(true);
+		this.pack();
 	}
 
 }

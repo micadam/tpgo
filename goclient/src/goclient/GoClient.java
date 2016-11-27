@@ -7,9 +7,6 @@ public class GoClient {
 	public GoClient(GoGameManager goGameManager, GoGameWindow goGameWindow){		
 		this.goGameWindow = goGameWindow;
 		this.goGameManager = goGameManager;
-		
-		goGameWindow.setVisible(true);
-		goGameWindow.pack();
 	}
 	
 	public static void main(String[] args){
