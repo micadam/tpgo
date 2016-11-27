@@ -123,6 +123,7 @@ _GoManager_
 --
 + GoManager(window : GoGameWIndow()
 +makeMove(x : int, y : int) : int
++getBoard(): int[][]</panel_attributes>
 </panel_attributes>
     <additional_attributes/>
   </element>
