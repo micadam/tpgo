@@ -1,5 +1,7 @@
 package goclient;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
 
 public class GoGameWindow extends JFrame {
@@ -29,13 +31,14 @@ public class GoGameWindow extends JFrame {
 	
 	
 	private void initUI(){
-		this.add(statusPanel);
-		this.add(gamePanel);
-		this.pack();
-		this.setVisible(true);
+		setLayout(new BorderLayout());
+		this.add(statusPanel, BorderLayout.NORTH);
+		this.add(gamePanel, BorderLayout.SOUTH);
+		
 	}
 	
 	public GoGameWindow(){
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.gamePanel = new GamePanel();
 		this.statusPanel = new StatusPanel();
 		

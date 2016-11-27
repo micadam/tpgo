@@ -1,6 +1,8 @@
 package goclient;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -36,6 +38,8 @@ public class StatusPanel extends JPanel {
 	}
 	
 	private void initUI() {
+		
+		this.setLayout(new FlowLayout());
 		gameTime = new JLabel("DUMMYTEXT");
 		this.add(gameTime);
 		
@@ -47,8 +51,10 @@ public class StatusPanel extends JPanel {
 		passButton.setEnabled(false);
 		territoriesButton = new JButton("Territories");
 		this.add(territoriesButton);
+		territoriesButton.setEnabled(false);
 		surrenderButton = new JButton("Surrender");
 		this.add(surrenderButton);
+		surrenderButton.setEnabled(false);
 		
 		this.setPreferredSize(new Dimension(600, 30));
 		this.setVisible(true);
