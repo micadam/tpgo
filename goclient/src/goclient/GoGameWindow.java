@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 
 public class GoGameWindow extends JFrame {
 	
+	
+	
 	GamePanel gamePanel;
 	StatusPanel statusPanel;
 	
@@ -29,11 +31,15 @@ public class GoGameWindow extends JFrame {
 		return move;
 		
 	}
+	
+	public void setStatusMessage(String message) {
+		statusPanel.setStatusMessage(message);
+	}
 	public void setBoard(int[][] board){
 		gamePanel.setBoard(board);
 	}
-	public void setField(Move move,int color){
-		gamePanel.makeMove(move.getX(),move.getY(),color);
+	public void setField(Move move){
+		gamePanel.makeMove(move);
 	}
 	
 	

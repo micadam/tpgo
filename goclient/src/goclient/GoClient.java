@@ -15,6 +15,8 @@ public class GoClient {
 			int gameStatus = 0;
 			Move move,response;
 			
+			goGameWindow.setStatusMessage(goGameManager.getStatusMessage());
+			
 			gameStatus = goGameManager.getGameStatus();
 			//System.out.println("GameStatus from GameManager: " + gameStatus);
 			if(gameStatus == Move.BLACK_NUMER || gameStatus == Move.WHITE_NUMBER) { 	//make a move
@@ -26,8 +28,8 @@ public class GoClient {
 				}
 			} else if (gameStatus == 2) { //download new move
 				response=goGameManager.getResponse();
-				if(!(response.getX()==-1 && response.getY()==-1))	//pass handling
-					goGameWindow.setField(response, -1);
+				if( response.getX() != -1 )	//pass handling
+					goGameWindow.setField(response);
 				goGameWindow.setBoard(goGameManager.getBoard());				
 			} else if (gameStatus == 0 ) { //wait
 				try{

@@ -24,8 +24,8 @@ public class GoGameManagerRaw implements GoGameManager {
 		for(int x=0;x<BOARD_SIZE && move==null;x++){
 			for(int y=0;y<BOARD_SIZE ;y++){
 				if(gameBoard[x][y]==0){ 
-					makeMove(x, y);
 					move=new Move(x,y, currentColor);
+					makeMove(x, y);
 					break;
 				}
 			}
@@ -39,7 +39,9 @@ public class GoGameManagerRaw implements GoGameManager {
 	}
 	
 	public String getStatusMessage() {
-		return "DUMMY"; //TODO
+		String color = (currentColor == Move.BLACK_NUMER ? "Black" : "White");
+		return "Make your move: " + color;
+		
 	}
 	public int makeMove(int x, int y){
 		if( x != -1 ){	  //check if player passed

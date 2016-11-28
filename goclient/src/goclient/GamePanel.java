@@ -19,8 +19,8 @@ public class GamePanel extends JPanel {
 	private int[][] board= new int[fieldCount][fieldCount];
 	MoveListener moveListener;
 	
-	public void makeMove(int x,int y,int color){
-		board[x][y]=color;
+	public void makeMove(Move move){
+		board[move.getX()][move.getY()]=move.getColor();
 		repaint();
 	}
 	public void setBoard(int[][] board){
@@ -120,7 +120,7 @@ class MoveListener extends MouseAdapter {
 					closestY = closestY / fieldSize - 1;
 					move.setX(closestX);
 					move.setY(closestY);
-					gamePanel.makeMove(closestX, closestY, 1);
+					gamePanel.makeMove(move);
 					System.out.println("Placing piece on coordinates: " + closestX + ", " + closestY);
 				}
 			}

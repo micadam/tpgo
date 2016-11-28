@@ -5,6 +5,7 @@ public class Move {
 	public static final int BLACK_NUMER = -1;
 	private int x;
 	private int y;
+	private int color;
 	
 	public int getX() {
 		return x;
@@ -18,9 +19,16 @@ public class Move {
 	public void setY(int y) {
 		this.y = y;
 	}
+	public int getColor() {
+		return color;
+	}
+	public void setColor() {
+		this.color = color;
+	}
 	
 	public Move(int x, int y, int color){
 		this.x = x;
 		this.y = y;
+		this.color = color;
 	}
 }

@@ -17,7 +17,7 @@ public class StatusPanel extends JPanel {
 	PassListener passListener;
 	JButton territoriesButton;
 	
-	JLabel managerLabel;
+	JLabel statusLabel;
 	
 	JLabel gameTime;
 
@@ -32,6 +32,9 @@ public class StatusPanel extends JPanel {
 		passButton.removeActionListener(passListener);
 		passButton.setEnabled(false);
 	}
+	public void setStatusMessage(String status) {
+		statusLabel.setText(status);
+	}
 	
 	private void initUI() {
 		
@@ -39,8 +42,8 @@ public class StatusPanel extends JPanel {
 		gameTime = new JLabel("DUMMYTEXT");
 		this.add(gameTime);
 		
-		managerLabel = new JLabel("DUMMYTEXT");
-		this.add(managerLabel);
+		statusLabel = new JLabel("DUMMYTEXT");
+		this.add(statusLabel);
 		
 		passButton = new JButton("Pass");
 		this.add(passButton);
