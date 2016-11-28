@@ -1,6 +1,8 @@
 package goclient;
 
 public class Move {
+	public static final int WHITE_NUMBER = 1;
+	public static final int BLACK_NUMER = -1;
 	private int x;
 	private int y;
 	
@@ -17,7 +19,7 @@ public class Move {
 		this.y = y;
 	}
 	
-	public Move(int x, int y){
+	public Move(int x, int y, int color){
 		this.x = x;
 		this.y = y;
 	}

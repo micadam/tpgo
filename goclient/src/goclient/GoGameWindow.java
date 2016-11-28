@@ -10,8 +10,8 @@ public class GoGameWindow extends JFrame {
 	StatusPanel statusPanel;
 	
 	
-	public Move getUserMove() {
-		Move move = new Move(-10, -10);
+	public Move getUserMove(int color) {
+		Move move = new Move(-10, -10, color);
 		statusPanel.waitForMove(move);
 		gamePanel.waitForMove(move);
 		
@@ -23,6 +23,7 @@ public class GoGameWindow extends JFrame {
 			System.out.println("Interrupted");
 		}
 		
+		System.out.println("Starting the waiting in game window");
 		statusPanel.stopWaitingForMove();
 		gamePanel.stopWaitingForMove();
 		return move;

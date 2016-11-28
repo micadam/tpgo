@@ -40,10 +40,12 @@ public class GamePanel extends JPanel {
 		for(int x=0;x<fieldCount;x++){		//pionki
 			for(int y=0;y<fieldCount;y++){
 				if(board[x][y]!=0){
-					if(board[x][y]==1)
+					if(board[x][y] == Move.WHITE_NUMBER)
 						g.setColor(Color.WHITE);
-					else {						
+					else if(board[x][y] == Move.BLACK_NUMER) {						
 						g.setColor(Color.BLACK);
+					} else {
+						throw new IllegalArgumentException();
 					}
 					g.fillOval(fieldSize + x * fieldSize - pawnSize/2, fieldSize + y * fieldSize - pawnSize/2, pawnSize, pawnSize);
 				}
@@ -58,8 +60,7 @@ public class GamePanel extends JPanel {
 		setSize(size,size);
 		boardColor= new Color(219,178,92);		//Brown
 		moveListener = new MoveListener(this);
-		this.addMouseListener(moveListener);
-		moveListener.setMove (new Move(-100, -100));
+		moveListener.setMove (new Move(-100, -100, 0));
 	}
 	
 	public void waitForMove(Move move) {
@@ -68,6 +69,7 @@ public class GamePanel extends JPanel {
 		
 	}
 	public void stopWaitingForMove() {
+		System.out.println("Stopped waiting for move");
 		this.removeMouseListener(moveListener);
 	}
 	
