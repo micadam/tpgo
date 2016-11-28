@@ -25,6 +25,7 @@ public class GamePanel extends JPanel {
 	}
 	public void setBoard(int[][] board){
 		this.board=board;
+		repaint();
 	}
 	
 	@Override

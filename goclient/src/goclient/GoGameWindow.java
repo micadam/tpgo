@@ -28,6 +28,12 @@ public class GoGameWindow extends JFrame {
 		return move;
 		
 	}
+	public void setBoard(int[][] board){
+		gamePanel.setBoard(board);
+	}
+	public void setField(Move move,int color){
+		gamePanel.makeMove(move.getX(),move.getY(),color);
+	}
 	
 	
 	private void initUI(){
