@@ -12,6 +12,7 @@ public class GoGameManagerRaw implements GoGameManager {
 	private int fieldsLeft;
 	private static final int BOARD_SIZE = 19;
 	int currentColor = -1;
+	boolean isBotGame=false;
 	
 	public GoGameManagerRaw(){
 		gameBoard=new int[BOARD_SIZE][BOARD_SIZE];
@@ -44,6 +45,8 @@ public class GoGameManagerRaw implements GoGameManager {
 	
 	public int getGameStatus() {
 	//	System.out.println("Returning status: " + currentColor);
+		if(isBotGame && currentColor==Move.BLACK_NUMER)
+			return 2;
 		return currentColor;
 	}
 	
@@ -70,6 +73,7 @@ public class GoGameManagerRaw implements GoGameManager {
 	}
 	public void setGameType(String type){
 		System.out.println("Game type set to "+type);
+		isBotGame=(type.compareTo("Singleplayer")==0);
 	}
 }
 class AuthWindowRaw extends JDialog{
