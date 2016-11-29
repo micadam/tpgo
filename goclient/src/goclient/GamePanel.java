@@ -37,6 +37,11 @@ public class GamePanel extends JPanel {
 			g.drawLine(i*fieldSize, fieldSize, i*fieldSize, size-fieldSize);	//piopnowe
 			g.drawLine(fieldSize, i*fieldSize, size-fieldSize, i*fieldSize);	//poziome
 		}
+		int dotSize=10;
+		for(int i=4;i<fieldCount;i+=6){		//4 bo jeszcze to puste
+			for(int j=4;j<fieldCount;j+=6)
+				g.fillOval(i * fieldSize - dotSize/2,j * fieldSize - dotSize/2, 10, dotSize);
+		}
 		for(int x=0;x<fieldCount;x++){		//pionki
 			for(int y=0;y<fieldCount;y++){
 				if(board[x][y]!=0){
