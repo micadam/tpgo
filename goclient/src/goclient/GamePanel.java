@@ -47,7 +47,7 @@ public class GamePanel extends JPanel {
 				if(board[x][y]!=0){
 					if(board[x][y] == Move.WHITE_NUMBER)
 						g.setColor(Color.WHITE);
-					else if(board[x][y] == Move.BLACK_NUMER) {						
+					else if(board[x][y] == Move.BLACK_NUMBER) {						
 						g.setColor(Color.BLACK);
 					} else {
 						throw new IllegalArgumentException();

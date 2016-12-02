@@ -2,7 +2,7 @@ package goclient;
 
 public class Move {
 	public static final int WHITE_NUMBER = 1;
-	public static final int BLACK_NUMER = -1;
+	public static final int BLACK_NUMBER = -1;
 	private int x;
 	private int y;
 	private int color;

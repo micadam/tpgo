@@ -17,7 +17,7 @@ public class GoGameManagerRaw implements GoGameManager {
 	public GoGameManagerRaw(){
 		gameBoard=new int[BOARD_SIZE][BOARD_SIZE];
 		fieldsLeft=BOARD_SIZE*BOARD_SIZE;
-		currentColor = Move.BLACK_NUMER;
+		currentColor = Move.BLACK_NUMBER;
 		AuthWindowRaw awr = new AuthWindowRaw(this);
 	}
 	
@@ -46,13 +46,13 @@ public class GoGameManagerRaw implements GoGameManager {
 	
 	public int getGameStatus() {
 	//	System.out.println("Returning status: " + currentColor);
-		if(isBotGame && currentColor==Move.BLACK_NUMER)
+		if(isBotGame && currentColor==Move.BLACK_NUMBER)
 			return 2;
 		return currentColor;
 	}
 	
 	public String getStatusMessage() {
-		String color = (currentColor == Move.BLACK_NUMER ? "Black" : "White");
+		String color = (currentColor == Move.BLACK_NUMBER ? "Black" : "White");
 		return "Make your move: " + color;
 		
 	}

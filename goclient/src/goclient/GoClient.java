@@ -21,7 +21,7 @@ public class GoClient {
 			
 			gameStatus = goGameManager.getGameStatus();
 			//System.out.println("GameStatus from GameManager: " + gameStatus);
-			if(gameStatus == Move.BLACK_NUMER || gameStatus == Move.WHITE_NUMBER) { 	//make a move
+			if(gameStatus == Move.BLACK_NUMBER || gameStatus == Move.WHITE_NUMBER) { 	//make a move
 				while(answer == -1) {
 					move=goGameWindow.getUserMove(gameStatus);
 					answer=goGameManager.makeMove(move.getX(),move.getY());
