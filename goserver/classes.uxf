@@ -4,12 +4,12 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>450</x>
-      <y>90</y>
+      <x>530</x>
+      <y>60</y>
       <w>210</w>
       <h>100</h>
     </coordinates>
-    <panel_attributes>Server
+    <panel_attributes>GoServer
 --
 Manages games
 --
@@ -20,12 +20,12 @@ Manages games
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>790</x>
-      <y>260</y>
+      <x>550</x>
+      <y>270</y>
       <w>210</w>
       <h>100</h>
     </coordinates>
-    <panel_attributes>Game
+    <panel_attributes>GameInstance
 --
 +makeMove(x: int, y: int) : int
 </panel_attributes>
@@ -34,8 +34,8 @@ Manages games
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>130</x>
-      <y>260</y>
+      <x>160</x>
+      <y>270</y>
       <w>210</w>
       <h>90</h>
     </coordinates>
@@ -50,8 +50,8 @@ Player
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>480</y>
-      <w>210</w>
+      <y>450</y>
+      <w>250</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>ConnectedPlayer
@@ -64,10 +64,10 @@ Manages connection with client
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>380</x>
-      <y>480</y>
+      <x>330</x>
+      <y>450</y>
       <w>180</w>
-      <h>110</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>Bot
 --
@@ -80,60 +80,61 @@ interface methods
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>240</x>
-      <y>340</y>
-      <w>200</w>
-      <h>160</h>
+      <x>270</x>
+      <y>350</y>
+      <w>120</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;180.0;140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;100.0;100.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>50</x>
-      <y>340</y>
-      <w>150</w>
-      <h>160</h>
+      <y>350</y>
+      <w>180</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>130.0;10.0;10.0;140.0</additional_attributes>
+    <additional_attributes>160.0;10.0;10.0;100.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>210</x>
-      <y>180</y>
-      <w>330</w>
-      <h>100</h>
+      <x>240</x>
+      <y>150</y>
+      <w>380</w>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;80.0;310.0;10.0</additional_attributes>
+    <additional_attributes>10.0;120.0;360.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
-      <y>180</y>
-      <w>310</w>
-      <h>100</h>
+      <x>630</x>
+      <y>150</y>
+      <w>50</w>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=0..n
 </panel_attributes>
-    <additional_attributes>290.0;80.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>470</x>
-      <y>260</y>
+      <x>800</x>
+      <y>270</y>
       <w>210</w>
-      <h>90</h>
+      <h>100</h>
     </coordinates>
-    <panel_attributes>RuleSet
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+RuleSet
 --
-Contains standard rules
+Contains varrious rules
 --
 +verify(x: int, y: int) : int</panel_attributes>
     <additional_attributes/>
@@ -141,12 +142,12 @@ Contains standard rules
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>550</x>
-      <y>180</y>
-      <w>30</w>
-      <h>100</h>
+      <x>670</x>
+      <y>150</y>
+      <w>240</w>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+    <additional_attributes>220.0;120.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

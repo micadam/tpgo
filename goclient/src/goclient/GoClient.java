@@ -8,12 +8,14 @@ public class GoClient {
 		this.goGameWindow = goGameWindow;
 		this.goGameManager = goGameManager;
 	}
+	
 	public void run(){
 		boolean exit=false;
 		while(!exit){			//TODO exit handling 
 			int answer=-1;
 			int gameStatus = 0;
-			Move move,response;
+			Move move;
+			Move response;
 			
 			goGameWindow.setStatusMessage(goGameManager.getStatusMessage());
 			
