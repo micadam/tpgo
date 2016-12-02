@@ -57,8 +57,9 @@ public class GoGameManagerConnected implements GoGameManager {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream(), true);
 			type=type.toUpperCase();
-			out.println(type+keyCode);
+			out.println(type+" "+keyCode);
 			String message=in.readLine();
+			System.out.println("[Client] Received message: "+message);
 			if(message.compareTo("NO")==0)
 				return "Wrong game keyCode";
 			if(message.compareTo("OK")!=0)		//TODO? in.readline()?
@@ -83,7 +84,8 @@ class AuthWindowListener implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String message=goGameManagerConnected.establishConnection(e.getActionCommand(),parent.getHost(),parent.getPort(),parent.getKeyCode());
+		String type = e.getActionCommand().split("\\s+")[0];
+		String message=goGameManagerConnected.establishConnection(type,parent.getHost(),parent.getPort(),parent.getKeyCode());
 		if(message==null)
 			parent.dispose();
 		else
