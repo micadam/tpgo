@@ -21,6 +21,7 @@ public class GoGameManagerRaw implements GoGameManager {
 		AuthWindowRaw awr = new AuthWindowRaw(this);
 	}
 	
+
 	public int[][] getBoard() {
 		int copy[][]=new int[BOARD_SIZE][BOARD_SIZE];
 		for(int x=0;x<BOARD_SIZE;x++){
@@ -34,8 +35,8 @@ public class GoGameManagerRaw implements GoGameManager {
 		for(int x=0;x<BOARD_SIZE && move==null;x++){
 			for(int y=0;y<BOARD_SIZE ;y++){
 				if(gameBoard[x][y]==0){ 
-					makeMove(x, y);
 					move=new Move(x,y, currentColor);
+					makeMove(x, y);
 					break;
 				}
 			}
@@ -76,9 +77,11 @@ public class GoGameManagerRaw implements GoGameManager {
 		isBotGame=(type.compareTo("Singleplayer")==0);
 	}
 }
+
+
 class AuthWindowRaw extends JDialog{
 	public AuthWindowRaw(GoGameManagerRaw ggmr){
-		setModal(true);
+		setModalityType(DEFAULT_MODALITY_TYPE);
 		setLocationRelativeTo(null);
 		setLayout(new FlowLayout());
 		Button multiplayer = new Button("Multiplayer");

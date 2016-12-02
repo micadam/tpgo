@@ -47,7 +47,8 @@ public class GoClient {
 		}
 	}
 	public static void main(String[] args){
-		GoClient goClient = new GoClient (new GoGameManagerRaw(), new GoGameWindow());
+
+		GoClient goClient = new GoClient (new GoGameManagerConnected(), new GoGameWindow());
 		goClient.run();
 	}
 }
