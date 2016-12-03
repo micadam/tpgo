@@ -42,6 +42,7 @@ public class GoGameManagerConnected implements GoGameManager {
 			System.out.println("[CLIENT] IOException in makeMove()");
 			return -100;
 		}
+		return 0;
 	}
 
 	@Override
@@ -111,6 +112,7 @@ public class GoGameManagerConnected implements GoGameManager {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream(), true);
 			type=type.toUpperCase();
+			keyCode=keyCode.toUpperCase();
 			out.println(type+" "+keyCode);
 			String message=in.readLine();
 			System.out.println("[Client] Received message: "+message);
