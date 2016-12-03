@@ -1,10 +1,14 @@
 package goserver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameInstance implements Runnable {
 	
 	Thread thread;
 	public static final int BOARD_SIZE = 19;
 	private int[][] gameBoard;
+	private List<GameRule> rules;
 	int currentColor;
 	
 	Player whitePlayer;
@@ -34,6 +38,8 @@ public class GameInstance implements Runnable {
 	public void run() {
 		gameBoard = new int[BOARD_SIZE][BOARD_SIZE];
 		currentColor = Move.BLACK_NUMBER;
+		rules = new ArrayList<GameRule>();
+		rules.add(new CaptureRule());
 		boolean gameOver = false;
 		while(gameOver == false) {
 			Player currentPlayer = (currentColor == Move.BLACK_NUMBER ? blackPlayer : whitePlayer);
@@ -43,11 +49,31 @@ public class GameInstance implements Runnable {
 			Move move = currentPlayer.getMove();
 			int x = move.getX();
 			int y = move.getY();
-			if( x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE || gameBoard[x][y] != 0) {
-				currentPlayer.sendResponse("NO");				
-			}	
-			else {
+			if(x == -1) {
 				currentPlayer.sendResponse("OK");
+				System.out.println("Player passed");
+			}
+			else if( x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE || gameBoard[x][y] != 0) {
+				currentPlayer.sendResponse("OK");
+				//TODO better invalid move handling
+				currentPlayer.sendResponse("SYNC");
+				notCurrentPlayer.sendResponse("SYNC");
+				sendBoardToPlayers();
+				currentColor *= -1;			//the player who played an invalid move moves again
+			} else {
+				gameBoard[x][y] = currentColor;
+				currentPlayer.sendResponse("OK");
+				boolean boardChanged = false;
+				for(GameRule gameRule : rules) {
+					boolean result =  gameRule.verifyMove(x, y, gameBoard);
+					boardChanged = (boardChanged || result);
+					System.out.println("PP" + boardChanged + result);
+				}
+				if(boardChanged) {
+					currentPlayer.sendResponse("SYNC");
+					notCurrentPlayer.sendResponse("SYNC");
+					sendBoardToPlayers();
+				}
 				notCurrentPlayer.sendOpponentsMove(new Move(x, y, currentColor));
 				
 			}
@@ -55,6 +81,22 @@ public class GameInstance implements Runnable {
 			currentColor *= -1;
 		}
 		
+	}
+	
+	private void sendBoardToPlayers() {
+		String boardRaw = "";
+		for(int i = 0; i < BOARD_SIZE; i++) {
+			for(int j = 0; j < BOARD_SIZE; j++) {
+				if(gameBoard[i][j] == -1) {
+					boardRaw += '2';
+				} else {
+					boardRaw += gameBoard[i][j];
+				}
+			}
+		}
+		
+		whitePlayer.sendBoard(boardRaw, BOARD_SIZE);
+		blackPlayer.sendBoard(boardRaw, BOARD_SIZE);
 	}
 	
 	public GameInstance(Player player, String keyCode) {

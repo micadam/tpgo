@@ -17,30 +17,23 @@ public class GoClient {
 			Move move;
 			Move response;
 			
-			goGameWindow.setStatusMessage(goGameManager.getStatusMessage());
 			
 			gameStatus = goGameManager.getGameStatus();
+			goGameWindow.setStatusMessage(goGameManager.getStatusMessage());
 			//System.out.println("GameStatus from GameManager: " + gameStatus);
 			if(gameStatus == Move.BLACK_NUMBER || gameStatus == Move.WHITE_NUMBER) { 	//make a move
-				while(answer == -1) {
+				while(answer == -1) { //GO
 					move=goGameWindow.getUserMove(gameStatus);
 					answer=goGameManager.makeMove(move.getX(),move.getY());
 					System.out.println("answer from gameManager: "+ answer);
-		//			goGameWindow.setBoard(goGameManager.getBoard());				
+					goGameWindow.setStatusMessage(goGameManager.getStatusMessage());
 				}
-			} else if (gameStatus == 2) { //download new move
+			} else if (gameStatus == 2) { //OPPONENT
 				response=goGameManager.getResponse();
 				if( response.getX() != -1 )	//pass handling
 					goGameWindow.setField(response);
-			//		goGameWindow.setBoard(goGameManager.getBoard());				
-			} else if (gameStatus == 0 ) { //wait
-				try{
-					Thread.sleep(500);
-					continue;					
-				}
-				catch (InterruptedException ie) {
-					System.out.println("Interrupted");
-				}
+			} else if (gameStatus == 3 ) { //SYNC
+				goGameWindow.setBoard(goGameManager.getBoard());
 			} else {
 				System.out.println("Unknown status: " + gameStatus);
 				throw new IllegalArgumentException();

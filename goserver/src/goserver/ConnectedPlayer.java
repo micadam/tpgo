@@ -32,7 +32,7 @@ public class ConnectedPlayer implements Player {
 				int x = Integer.parseInt(moveTokens[1]);
 				int y = Integer.parseInt(moveTokens[2]);
 				return new Move(x, y, 0);
-			} else if(moveTokens[0] == "PASS") {
+			} else if(moveTokens[0].equals("PASS")) {
 				return new Move(-1, -1, 0);
 			} else {
 				System.out.println("Unknown move: " + move);
@@ -60,6 +60,12 @@ public class ConnectedPlayer implements Player {
 	public void sendOpponentsMove(Move move) {
 		out.println("OPPONENT " + move.getX() + " " + move.getY() + " " + move.getColor());
 		
+	}
+
+	@Override
+	public void sendBoard(String boardRaw, int boardSize) {
+		out.println(boardSize);
+		out.println(boardRaw);
 	}
 
 }

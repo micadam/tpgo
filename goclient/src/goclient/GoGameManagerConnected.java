@@ -19,6 +19,38 @@ public class GoGameManagerConnected implements GoGameManager {
 	private BufferedReader in;
 	private PrintWriter out;
 	private Move lastOpponentsMove;
+	private String currentStatusMessage = "DUMMYTEXT";
+	
+	@Override
+	public int getGameStatus() {
+		try{
+			String status = in.readLine();
+			String[] statusTokens = status.split("\\s+");
+			System.out.println("[CLIENT] Response in geGameStatus(): "+ status);
+			if(statusTokens[0].equals("GO")) {
+				int color = Integer.parseInt(statusTokens[1]);
+				String colorString = (color == Move.WHITE_NUMBER ? "White" : "Black");
+				currentStatusMessage = "Your move: " + colorString;
+				return color;
+			} else if (statusTokens[0].equals("OPPONENT")) {
+				int x = Integer.parseInt(statusTokens[1]);
+				int y = Integer.parseInt(statusTokens[2]);
+				int color = Integer.parseInt(statusTokens[3]);
+				lastOpponentsMove = new Move(x, y, color);
+				return 2;
+			} else if(statusTokens[0].equals("SYNC")) {
+				return 3;
+			}
+			else {
+				System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
+				return -100;
+			}
+		} catch (IOException ioe) {
+			System.out.println("[CLIENT] IOException in getGameStatus();");
+			return -100;
+		}	
+	}
+	
 	@Override
 	public int makeMove(int x, int y) {
 		try{ 			
@@ -32,11 +64,12 @@ public class GoGameManagerConnected implements GoGameManager {
 			String response = in.readLine();
 			System.out.println("[CLIENT] Response in makeMove(): " + response);
 			if(response.equals("OK")){
+				currentStatusMessage = "Wait for the opponent's move";
 				return 1;
 			} else if(response.equals("NO")) {
 				return -1;
 			} else if(response.equals("SYNC")) {
-				return 2;
+				return 300;
 			}else {
 				System.out.println("[CLIENT] Unknown response in makeMove: " + response);
 				return -100;
@@ -78,36 +111,10 @@ public class GoGameManagerConnected implements GoGameManager {
 		return lastOpponentsMove;
 	}
 
-	@Override
-	public int getGameStatus() {
-		try{
-			String status = in.readLine();
-			String[] statusTokens = status.split("\\s+");
-			System.out.println("[CLIENT] Response in geGameStatus(): "+ status);
-			if(statusTokens[0].equals("GO")) {
-				return Integer.parseInt(statusTokens[1]);
-			} else if (statusTokens[0].equals("OPPONENT")) {
-				int x = Integer.parseInt(statusTokens[1]);
-				int y = Integer.parseInt(statusTokens[2]);
-				int color = Integer.parseInt(statusTokens[3]);
-				lastOpponentsMove = new Move(x, y, color);
-				return 2;
-			}
-			else {
-				System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
-				return -100;
-			}
-		} catch (IOException ioe) {
-			System.out.println("[CLIENT] IOException in getGameStatus();");
-			return -100;
-		}
-		
-	}
 
 	@Override
 	public String getStatusMessage() {
-		//todo
-		return "TODO";
+		return currentStatusMessage;
 	}
 	
 	public GoGameManagerConnected() {
