@@ -37,7 +37,9 @@ public class GameInstance implements Runnable {
 		boolean gameOver = false;
 		while(gameOver == false) {
 			Player currentPlayer = (currentColor == Move.BLACK_NUMBER ? blackPlayer : whitePlayer);
+			
 			Move move = currentPlayer.getMove();
+			currentPlayer.sendResponse("OK");
 			
 		}
 		

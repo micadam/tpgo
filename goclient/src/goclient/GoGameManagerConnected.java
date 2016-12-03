@@ -20,14 +20,44 @@ public class GoGameManagerConnected implements GoGameManager {
 	private PrintWriter out;
 	@Override
 	public int makeMove(int x, int y) {
-		// TODO Auto-generated method stub
-		return 0;
+		try{ 			
+			if(x == -1) {
+				out.println("PASS");
+			}
+			else {
+				out.println("MOVE " + x + " " + y);
+			}
+			
+			String response = in.readLine();
+			if(response.equals("OK")){
+				return 1;
+			} else if(response.equals("")) {
+				
+			}
+		} catch (IOException ioe) {
+			System.out.println("[CLIENT] IOException in makeMove()");
+		}
 	}
 
 	@Override
 	public int[][] getBoard() {
-		// TODO Auto-generated method stub
-		return null;
+		try {			
+			out.println("DUMP");
+			int boardSize = Integer.parseInt(in.readLine());
+			int board[][] = new int[boardSize][boardSize];
+			
+			String boardRaw = in.readLine();
+			for(int i = 0; i < boardSize; i++) {
+				for(int j = 0; j < boardSize; j++) {
+					char curField = boardRaw.charAt(i * boardSize + j);
+					board[i][j] = curField;
+				}
+			}
+			return board;
+		} catch (IOException ioe) {
+			System.out.println("[CLIENT] IOException in getBoard()");
+			return null;
+		}	
 	}
 
 	@Override
@@ -51,6 +81,8 @@ public class GoGameManagerConnected implements GoGameManager {
 	public GoGameManagerConnected() {
 		AuthWindow aw = new AuthWindow(this);
 	}
+	
+	
 	public String establishConnection(String type,String host,int port,String keyCode){
 		try {
 			socket=new Socket(host,port);
