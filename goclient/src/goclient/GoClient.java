@@ -29,7 +29,7 @@ public class GoClient {
 					goGameWindow.setStatusMessage(goGameManager.getStatusMessage());
 				}
 			} else if (gameStatus == 2) { //OPPONENT
-				response=goGameManager.getResponse();
+				response=goGameManager.getResponse();	
 				if( response.getX() != -1 )	//pass handling
 					goGameWindow.setField(response);
 			} else if (gameStatus == 3 ) { //SYNC

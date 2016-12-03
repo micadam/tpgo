@@ -47,6 +47,10 @@ public class GoServer {
 					if(okay) {
 						out.println("OK");
 						GameInstance gi = new GameInstance(new ConnectedPlayer(playerSocket), messageTokens[1]);
+						if(messageTokens.length > 2){
+							if(messageTokens[2].equals("BOT"))
+								gi.addPlayer(new Bot(gi));
+						}
 						games.add(gi);
 					}	
 				} else if (messageTokens[0].equals("JOIN")) {	//JOIN <keycode>, only if a game with such keycode exists
