@@ -37,10 +37,10 @@ public class GameInstance implements Runnable {
 		boolean gameOver = false;
 		while(gameOver == false) {
 			Player currentPlayer = (currentColor == Move.BLACK_NUMBER ? blackPlayer : whitePlayer);
+			Player notCurrentPlayer = (currentColor == Move.BLACK_NUMBER ? whitePlayer : blackPlayer);
 			
 			currentPlayer.sendAlert(currentColor);
 			Move move = currentPlayer.getMove();
-			currentPlayer.sendResponse("OK");
 			int x = move.getX();
 			int y = move.getY();
 			if( x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE || gameBoard[x][y] != 0) {
@@ -48,6 +48,8 @@ public class GameInstance implements Runnable {
 			}	
 			else {
 				currentPlayer.sendResponse("OK");
+				notCurrentPlayer.sendOpponentsMove(new Move(x, y, currentColor));
+				
 			}
 			
 			currentColor *= -1;

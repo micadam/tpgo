@@ -32,7 +32,7 @@ public class GoClient {
 				response=goGameManager.getResponse();
 				if( response.getX() != -1 )	//pass handling
 					goGameWindow.setField(response);
-				goGameWindow.setBoard(goGameManager.getBoard());				
+			//		goGameWindow.setBoard(goGameManager.getBoard());				
 			} else if (gameStatus == 0 ) { //wait
 				try{
 					Thread.sleep(500);

@@ -18,6 +18,7 @@ public class GoGameManagerConnected implements GoGameManager {
 	private Socket socket;
 	private BufferedReader in;
 	private PrintWriter out;
+	private Move lastOpponentsMove;
 	@Override
 	public int makeMove(int x, int y) {
 		try{ 			
@@ -29,6 +30,7 @@ public class GoGameManagerConnected implements GoGameManager {
 			}
 			
 			String response = in.readLine();
+			System.out.println("[CLIENT] Response in makeMove(): " + response);
 			if(response.equals("OK")){
 				return 1;
 			} else if(response.equals("NO")) {
@@ -36,13 +38,13 @@ public class GoGameManagerConnected implements GoGameManager {
 			} else if(response.equals("SYNC")) {
 				return 2;
 			}else {
+				System.out.println("[CLIENT] Unknown response in makeMove: " + response);
 				return -100;
 			}
 		} catch (IOException ioe) {
 			System.out.println("[CLIENT] IOException in makeMove()");
 			return -100;
 		}
-		return 0;
 	}
 
 	@Override
@@ -73,8 +75,7 @@ public class GoGameManagerConnected implements GoGameManager {
 
 	@Override
 	public Move getResponse() {
-		// TODO Auto-generated method stub
-		return null;
+		return lastOpponentsMove;
 	}
 
 	@Override
@@ -85,7 +86,15 @@ public class GoGameManagerConnected implements GoGameManager {
 			System.out.println("[CLIENT] Response in geGameStatus(): "+ status);
 			if(statusTokens[0].equals("GO")) {
 				return Integer.parseInt(statusTokens[1]);
-			} else {
+			} else if (statusTokens[0].equals("OPPONENT")) {
+				int x = Integer.parseInt(statusTokens[1]);
+				int y = Integer.parseInt(statusTokens[2]);
+				int color = Integer.parseInt(statusTokens[3]);
+				lastOpponentsMove = new Move(x, y, color);
+				return 2;
+			}
+			else {
+				System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
 				return -100;
 			}
 		} catch (IOException ioe) {

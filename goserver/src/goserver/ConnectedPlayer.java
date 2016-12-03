@@ -56,4 +56,10 @@ public class ConnectedPlayer implements Player {
 		
 	}
 
+	@Override
+	public void sendOpponentsMove(Move move) {
+		out.println("OPPONENT " + move.getX() + " " + move.getY() + " " + move.getColor());
+		
+	}
+
 }
