@@ -23,9 +23,6 @@ public class GameInstance implements Runnable {
 	public String getKeyCode() {
 		return keyCode;
 	}
-	public int[][] getBoard(){
-		return gameBoard;
-	}
 	
 	public boolean addPlayer(Player player) {
 		if(whitePlayer == null) {			

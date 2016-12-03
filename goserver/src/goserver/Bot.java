@@ -3,15 +3,14 @@ package goserver;
 import java.util.Random;
 
 public class Bot implements Player {
-	private GameInstance gameInstance;
 	private Move opponentsMove;
 	private Random random;
+	private int[][] gameBoard;
 	private static final int BOARD_SIZE=19;
 	@Override
 	public Move getMove() {
 		// TODO Auto-generated method stub
 		Move move=null;
-		int[][] gameBoard = gameInstance.getBoard();
 		if(opponentsMove!=null){
 			if(opponentsMove.getX()==-1){
 				//TODO, change sendOpponentsMove to access this code
@@ -68,20 +67,30 @@ public class Bot implements Player {
 
 	@Override
 	public void sendOpponentsMove(Move move) {
-		if(move.getX()!=-1)			//if pass then doesn't matter
+		if(move.getX()!=-1){			//if pass then doesn't matter
 			this.opponentsMove=move;
+			gameBoard[move.getX()][move.getY()]=move.getColor();
+		}
 	}
 
 	@Override
-	public void sendBoard(String gameBoardRaw, int gameBoardSize) {
-		// TODO Auto-generated method stub
-		
+	public void sendBoard(String boardRaw, int boardSize) {
+		for(int i = 0; i < boardSize; i++) {		
+			for(int j = 0; j < boardSize; j++) {
+				char curField = boardRaw.charAt(i * boardSize + j);
+				int fieldValue;
+				if(curField == '2') {
+					fieldValue = -1;
+				} else {
+					fieldValue = curField - '0';
+				}
+				gameBoard[i][j] = fieldValue;
+			}
+		}
 	}
-	public Bot(GameInstance gameInstance){
+	public Bot(){
 		random=new Random();
-		this.gameInstance=gameInstance;
-		System.out.println("Bot for game "+ gameInstance.getKeyCode()+" created");
-
+		gameBoard=new int[BOARD_SIZE][BOARD_SIZE];
 	}
 	
 }

@@ -49,7 +49,7 @@ public class GoServer {
 						GameInstance gi = new GameInstance(new ConnectedPlayer(playerSocket), messageTokens[1]);
 						if(messageTokens.length > 2){
 							if(messageTokens[2].equals("BOT"))
-								gi.addPlayer(new Bot(gi));
+								gi.addPlayer(new Bot());
 						}
 						games.add(gi);
 					}	
