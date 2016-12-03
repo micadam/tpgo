@@ -25,8 +25,8 @@ public class GoClient {
 				while(answer == -1) {
 					move=goGameWindow.getUserMove(gameStatus);
 					answer=goGameManager.makeMove(move.getX(),move.getY());
-					System.out.println("answer from gameManager : "+ answer);
-					goGameWindow.setBoard(goGameManager.getBoard());				
+					System.out.println("answer from gameManager: "+ answer);
+		//			goGameWindow.setBoard(goGameManager.getBoard());				
 				}
 			} else if (gameStatus == 2) { //download new move
 				response=goGameManager.getResponse();
@@ -42,6 +42,7 @@ public class GoClient {
 					System.out.println("Interrupted");
 				}
 			} else {
+				System.out.println("Unknown status: " + gameStatus);
 				throw new IllegalArgumentException();
 			}
 		}

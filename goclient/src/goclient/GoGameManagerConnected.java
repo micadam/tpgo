@@ -31,18 +31,22 @@ public class GoGameManagerConnected implements GoGameManager {
 			String response = in.readLine();
 			if(response.equals("OK")){
 				return 1;
-			} else if(response.equals("")) {
-				
+			} else if(response.equals("NO")) {
+				return -1;
+			} else if(response.equals("SYNC")) {
+				return 2;
+			}else {
+				return -100;
 			}
 		} catch (IOException ioe) {
 			System.out.println("[CLIENT] IOException in makeMove()");
+			return -100;
 		}
 	}
 
 	@Override
 	public int[][] getBoard() {
-		try {			
-			out.println("DUMP");
+		try {	
 			int boardSize = Integer.parseInt(in.readLine());
 			int board[][] = new int[boardSize][boardSize];
 			
@@ -50,7 +54,13 @@ public class GoGameManagerConnected implements GoGameManager {
 			for(int i = 0; i < boardSize; i++) {
 				for(int j = 0; j < boardSize; j++) {
 					char curField = boardRaw.charAt(i * boardSize + j);
-					board[i][j] = curField;
+					int fieldValue;
+					if(curField == '2') {
+						fieldValue = -1;
+					} else {
+						fieldValue = curField - '0';
+					}
+					board[i][j] = fieldValue;
 				}
 			}
 			return board;
@@ -68,14 +78,26 @@ public class GoGameManagerConnected implements GoGameManager {
 
 	@Override
 	public int getGameStatus() {
-		// TODO Auto-generated method stub
-		return 0;
+		try{
+			String status = in.readLine();
+			String[] statusTokens = status.split("\\s+");
+			System.out.println("[CLIENT] Response in geGameStatus(): "+ status);
+			if(statusTokens[0].equals("GO")) {
+				return Integer.parseInt(statusTokens[1]);
+			} else {
+				return -100;
+			}
+		} catch (IOException ioe) {
+			System.out.println("[CLIENT] IOException in getGameStatus();");
+			return -100;
+		}
+		
 	}
 
 	@Override
 	public String getStatusMessage() {
-		// TODO Auto-generated method stub
-		return null;
+		//todo
+		return "TODO";
 	}
 	
 	public GoGameManagerConnected() {

@@ -26,8 +26,9 @@ public class ConnectedPlayer implements Player {
 	public Move getMove() {
 		try {
 			String move = in.readLine();
+			System.out.println("Read move: " + move);
 			String[] moveTokens = move.split("\\s+");
-			if(moveTokens[0] == "MOVE") {
+			if(moveTokens[0].equals("MOVE")) {
 				int x = Integer.parseInt(moveTokens[1]);
 				int y = Integer.parseInt(moveTokens[2]);
 				return new Move(x, y, 0);
@@ -46,6 +47,12 @@ public class ConnectedPlayer implements Player {
 	@Override
 	public void sendResponse(String response) {
 		out.println(response);
+		
+	}
+
+	@Override
+	public void sendAlert(int color) {
+		out.println("GO " + color);
 		
 	}
 

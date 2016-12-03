@@ -38,9 +38,19 @@ public class GameInstance implements Runnable {
 		while(gameOver == false) {
 			Player currentPlayer = (currentColor == Move.BLACK_NUMBER ? blackPlayer : whitePlayer);
 			
+			currentPlayer.sendAlert(currentColor);
 			Move move = currentPlayer.getMove();
 			currentPlayer.sendResponse("OK");
+			int x = move.getX();
+			int y = move.getY();
+			if( x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE || gameBoard[x][y] != 0) {
+				currentPlayer.sendResponse("NO");				
+			}	
+			else {
+				currentPlayer.sendResponse("OK");
+			}
 			
+			currentColor *= -1;
 		}
 		
 	}
