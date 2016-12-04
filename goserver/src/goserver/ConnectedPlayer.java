@@ -68,4 +68,10 @@ public class ConnectedPlayer implements Player {
 		out.println(boardRaw);
 	}
 
+	@Override
+	public void sendCancellingMove(Move move) {
+		out.println("REDO "+ move.getX() + " " + move.getY() + " " + move.getColor());
+		
+	}
+
 }

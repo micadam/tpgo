@@ -8,5 +8,5 @@ public interface Player {
 	public void sendResponse(String response);
 	public void sendOpponentsMove(Move move);
 	public void sendBoard(String boardRaw, int boardSize);
-
+	public void sendCancellingMove(Move move);
 }

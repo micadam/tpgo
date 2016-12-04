@@ -92,5 +92,11 @@ public class Bot implements Player {
 		random=new Random();
 		gameBoard=new int[BOARD_SIZE][BOARD_SIZE];
 	}
+
+	@Override
+	public void sendCancellingMove(Move move) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

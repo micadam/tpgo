@@ -53,13 +53,14 @@ public class GameInstance implements Runnable {
 				currentPlayer.sendResponse("OK");
 				System.out.println("Player passed");
 			}
-			else if( x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE || gameBoard[x][y] != 0) {
-				currentPlayer.sendResponse("OK");
-				//TODO better invalid move handling
-				currentPlayer.sendResponse("SYNC");
-				notCurrentPlayer.sendResponse("SYNC");
-				sendBoardToPlayers();
+			else if( x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE ) {
+				currentPlayer.sendResponse("NO");
 				currentColor *= -1;			//the player who played an invalid move moves again
+				
+			} else if (gameBoard[x][y] != 0){
+				currentPlayer.sendResponse("NO");
+				currentPlayer.sendCancellingMove(new Move(x,y,gameBoard[x][y]));
+				currentColor *= -1;			
 			} else {
 				gameBoard[x][y] = currentColor;
 				currentPlayer.sendResponse("OK");

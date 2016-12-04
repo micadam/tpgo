@@ -76,6 +76,13 @@ public class GoGameManagerRaw implements GoGameManager {
 		System.out.println("Game type set to "+type);
 		isBotGame=(type.compareTo("Singleplayer")==0);
 	}
+
+
+	@Override
+	public Move getCancallingMove() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 

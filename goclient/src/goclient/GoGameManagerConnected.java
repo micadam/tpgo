@@ -19,6 +19,7 @@ public class GoGameManagerConnected implements GoGameManager {
 	private BufferedReader in;
 	private PrintWriter out;
 	private Move lastOpponentsMove;
+	private Move cancellingMove;
 	private String currentStatusMessage = "DUMMYTEXT";
 	
 	@Override
@@ -40,8 +41,13 @@ public class GoGameManagerConnected implements GoGameManager {
 				return 2;
 			} else if(statusTokens[0].equals("SYNC")) {
 				return 3;
-			}
-			else {
+			} else if (statusTokens[0].equals("REDO")) {
+				int x = Integer.parseInt(statusTokens[1]);
+				int y = Integer.parseInt(statusTokens[2]);
+				int color = Integer.parseInt(statusTokens[3]);
+				cancellingMove = new Move(x, y, color);
+				return 4;
+			}else {
 				System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
 				return -100;
 			}
@@ -67,8 +73,9 @@ public class GoGameManagerConnected implements GoGameManager {
 				currentStatusMessage = "Wait for the opponent's move";
 				return 1;
 			} else if(response.equals("NO")) {
+				currentStatusMessage= "Wrong move, try again";
 				return -1;
-			} else if(response.equals("SYNC")) {
+			} else if(response.equals("SYNC")) {			
 				return 300;
 			}else {
 				System.out.println("[CLIENT] Unknown response in makeMove: " + response);
@@ -115,6 +122,10 @@ public class GoGameManagerConnected implements GoGameManager {
 	@Override
 	public String getStatusMessage() {
 		return currentStatusMessage;
+	}
+	@Override 
+	public Move getCancallingMove(){
+		return cancellingMove;
 	}
 	
 	public GoGameManagerConnected() {
