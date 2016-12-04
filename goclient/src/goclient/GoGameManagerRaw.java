@@ -10,7 +10,7 @@ import javax.swing.JDialog;
 public class GoGameManagerRaw implements GoGameManager {
 	private int gameBoard[][];
 	private int fieldsLeft;
-	private static final int BOARD_SIZE = 19;
+	private static int BOARD_SIZE = 19;
 	int currentColor = -1;
 	boolean isBotGame=false;
 	
@@ -82,6 +82,12 @@ public class GoGameManagerRaw implements GoGameManager {
 	public Move getCancellingMove() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public int getBoardSize() {
+		return BOARD_SIZE;
 	}
 }
 

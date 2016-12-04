@@ -20,14 +20,15 @@ public class GoGameManagerConnected implements GoGameManager {
 	private PrintWriter out;
 	private Move lastOpponentsMove;
 	private Move cancellingMove;
+	private int boardSize;
 	private String currentStatusMessage = "DUMMYTEXT";
 	
 	@Override
 	public int getGameStatus() {
 		try{
 			String status = in.readLine();
-			String[] statusTokens = status.split("\\s+");
 			System.out.println("[CLIENT] Response in geGameStatus(): "+ status);
+			String[] statusTokens = status.split("\\s+");
 			if(statusTokens[0].equals("GO")) {
 				int color = Integer.parseInt(statusTokens[1]);
 				String colorString = (color == Move.WHITE_NUMBER ? "White" : "Black");
@@ -117,6 +118,10 @@ public class GoGameManagerConnected implements GoGameManager {
 	public Move getResponse() {
 		return lastOpponentsMove;
 	}
+	
+	public int getBoardSize() {
+		return boardSize;
+	}
 
 
 	@Override
@@ -133,19 +138,28 @@ public class GoGameManagerConnected implements GoGameManager {
 	}
 	
 	
-	public String establishConnection(String type,String host,int port,String keyCode){
+	public String establishConnection(String type,String host,int port,String keyCode, int boardSize, boolean botSetting){
 		try {
 			socket=new Socket(host,port);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream(), true);
 			type=type.toUpperCase();
-			out.println(type+" "+keyCode);
+			this.boardSize = boardSize;
+			String botString = (botSetting == true ? "BOT" : "NOBOT");
+			out.println(type+" "+keyCode + " " + boardSize + " " + botString);
 			String message=in.readLine();
 			System.out.println("[Client] Received message: "+message);
-			if(message.compareTo("NO")==0)
+			if(message.equals("NO")){				
 				return "Wrong game keyCode";
-			if(message.compareTo("OK")!=0)		//TODO? in.readline()?
+			}
+			if(message.equals("OK")){		//TODO? in.readline()?
+				if(type.equals("JOIN")) {
+					this.boardSize = Integer.parseInt(in.readLine());
+					System.out.println("[CLIENT] Remote game board size: " + boardSize);
+				}
+			} else {				
 				return "A connection error occured";
+			}
 		} catch (IOException e) {
 			// TODO comment printStackTrace after tests 
 			e.printStackTrace();
@@ -157,79 +171,3 @@ public class GoGameManagerConnected implements GoGameManager {
 
 }
 
-class AuthWindowListener implements ActionListener{
-	private GoGameManagerConnected goGameManagerConnected;
-	private AuthWindow parent;
-	public AuthWindowListener(GoGameManagerConnected goGameManagerConnected,AuthWindow parent){
-		this.goGameManagerConnected=goGameManagerConnected;
-		this.parent=parent;
-	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String type = e.getActionCommand().split("\\s+")[0];
-		String message=goGameManagerConnected.establishConnection(type,parent.getHost(),parent.getPort(),parent.getKeyCode());
-		if(message==null)
-			parent.dispose();
-		else
-			parent.setMessage(message);
-	}
-	
-}
-class AuthWindow extends JDialog {
-	JLabel addressLabel;
-	JLabel portLabel;
-	JLabel keyCodeLabel;
-	JLabel messageLabel;
-	JTextField addressField;
-	JTextField portField;
-	JTextField keyCodeField;
-	
-	JButton hostGame;
-	JButton joinGame;
-	
-	private void prepareUI(GoGameManagerConnected goGameManagerConnected) {
-		addressLabel = new JLabel("Server address");
-		portLabel = new JLabel("Server Port");
-		keyCodeLabel = new JLabel("Game keycode");
-		messageLabel=new JLabel();
-		addressField = new JTextField("localhost");
-		portField = new JTextField("47615");
-		keyCodeField= new JTextField(10);
-		
-		hostGame = new JButton("Host game");
-		hostGame.addActionListener(new AuthWindowListener(goGameManagerConnected,this));
-		joinGame = new JButton("Join game");
-		joinGame.addActionListener(new AuthWindowListener(goGameManagerConnected,this));
-		setLayout(new FlowLayout());
-		add(addressLabel);
-		add(portLabel);
-		add(keyCodeLabel);
-		add(addressField);
-		add(portField);
-		add(keyCodeField);
-		add(messageLabel);
-		add(hostGame);
-		add(joinGame);
-	}
-	public String getHost(){
-		return addressField.getText();
-	}
-	public int getPort(){
-		return Integer.parseInt(portField.getText());
-	}
-	public String getKeyCode(){
-		return keyCodeField.getText();
-	}
-	public void setMessage(String message){
-		messageLabel.setText(message);
-	}
-	
-	public AuthWindow(GoGameManagerConnected goGameManagerConnected) {
-		
-		setModalityType(DEFAULT_MODALITY_TYPE);
-		setSize(280, 200);
-		prepareUI(goGameManagerConnected);
-		setVisible(true);
-		
-	}
-}

@@ -6,7 +6,7 @@ import java.util.List;
 public class GameInstance implements Runnable {
 	
 	Thread thread;
-	public static final int BOARD_SIZE = 19;
+	private static int BOARD_SIZE = 19;
 	private int[][] gameBoard;
 	private List<GameRule> rules;
 	int currentColor;
@@ -19,6 +19,9 @@ public class GameInstance implements Runnable {
 	
 	public int getState() {
 		return currentState;
+	}
+	public int getBoardSize() {
+		return BOARD_SIZE;
 	}
 	public String getKeyCode() {
 		return keyCode;
@@ -112,9 +115,10 @@ public class GameInstance implements Runnable {
 		blackPlayer.sendBoard(boardRaw, BOARD_SIZE);
 	}
 	
-	public GameInstance(Player player, String keyCode) {
+	public GameInstance(Player player, String keyCode, int boardSize) {
 		blackPlayer = player;
 		this.keyCode = keyCode;
+		BOARD_SIZE = boardSize;
 	}
 
 }

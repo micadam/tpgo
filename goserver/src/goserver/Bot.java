@@ -6,7 +6,7 @@ public class Bot implements Player {
 	private Move opponentsMove;
 	private Random random;
 	private int[][] gameBoard;
-	private static final int BOARD_SIZE = 19;
+	private static int BOARD_SIZE = 19;
 
 	@Override
 	public Move getMove() {
@@ -94,8 +94,9 @@ public class Bot implements Player {
 		}
 	}
 
-	public Bot() {
+	public Bot(int boardSize) {
 		random = new Random();
+		this.BOARD_SIZE = boardSize;
 		gameBoard = new int[BOARD_SIZE][BOARD_SIZE];
 	}
 

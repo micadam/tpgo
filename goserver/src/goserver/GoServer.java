@@ -28,12 +28,13 @@ public class GoServer {
 				String message = in.readLine();
 				System.out.println("[SERVER] Received message. Its content: " + message);
 				String messageTokens[] = message.split("\\s+");
-				if(messageTokens.length < 2) {	//Not enough arguments
+				if(messageTokens.length < 4) {	//Not enough arguments
 					out.println("NO");
 					playerSocket.close();
 					continue;
 				}
-				if(messageTokens[0].equals("HOST")) {  //HOST <keycode>, only if a game with such keycode doesn't already exist
+				if(messageTokens[0].equals("CREATE")) {  //CREATE <keycode> <boardSize> *BOT*, only if a game with such keycode doesn't already exist
+					
 					boolean okay = true;
 					for(GameInstance gi : games) {
 						if(gi.getKeyCode().equals(messageTokens[1])) {
@@ -46,14 +47,13 @@ public class GoServer {
 					}
 					if(okay) {
 						out.println("OK");
-						GameInstance gi = new GameInstance(new ConnectedPlayer(playerSocket), messageTokens[1]);
-						if(messageTokens.length > 2){
-							if(messageTokens[2].equals("BOT"))
-								gi.addPlayer(new Bot());
-						}
+						GameInstance gi = new GameInstance(new ConnectedPlayer(playerSocket), messageTokens[1], Integer.parseInt(messageTokens[2]));
+							if(messageTokens[3].equals("BOT")){								
+								gi.addPlayer(new Bot(Integer.parseInt(messageTokens[2])));
+							}
 						games.add(gi);
 					}	
-				} else if (messageTokens[0].equals("JOIN")) {	//JOIN <keycode>, only if a game with such keycode exists
+				} else if (messageTokens[0].equals("JOIN")) {	//JOIN <keycode, only if a game with such keycode exists
 					boolean added = false;
 					for(GameInstance gi : games) {
 						if(gi.getKeyCode().equals(messageTokens[1])) {
@@ -61,6 +61,7 @@ public class GoServer {
 							if(added) {
 								System.out.println("[SERVER] Added played to a game with keycode " + messageTokens[1]);
 								out.println("OK");
+								out.println(gi.getBoardSize());
 							}
 							else { 
 								System.out.println("[SERVER] Could not add a player to a game as it was full. Keycode: " + messageTokens[1]);

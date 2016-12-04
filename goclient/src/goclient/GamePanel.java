@@ -12,11 +12,11 @@ import javax.swing.SwingUtilities;
 
 public class GamePanel extends JPanel {
 	private final int fieldSize=50;
-	private final int fieldCount=19;				//zrobi żeby dało się zmienia		
+	private int boardSize=19;				//zrobi żeby dało się zmienia		
 	private int size;
 	private int pawnSize= 50;
 	private Color boardColor;
-	private int[][] board= new int[fieldCount][fieldCount];
+	private int[][] board= new int[boardSize][boardSize];
 	MoveListener moveListener;
 	
 	public void makeMove(Move move){
@@ -33,17 +33,19 @@ public class GamePanel extends JPanel {
 		g.setColor(boardColor);			
 		g.fillRect(0, 0, size + fieldSize, size + fieldSize);
 		g.setColor(Color.BLACK);
-		for(int i=1;i<=fieldCount;i++){		//kreski
+		for(int i=1;i<=boardSize;i++){		//kreski
 			g.drawLine(i*fieldSize, fieldSize, i*fieldSize, size-fieldSize);	//piopnowe
 			g.drawLine(fieldSize, i*fieldSize, size-fieldSize, i*fieldSize);	//poziome
 		}
 		int dotSize=10;
-		for(int i=4;i<fieldCount;i+=6){		//4 bo jeszcze to puste
-			for(int j=4;j<fieldCount;j+=6)
-				g.fillOval(i * fieldSize - dotSize/2,j * fieldSize - dotSize/2, 10, dotSize);
+		if(boardSize == 19) {			
+			for(int i=4;i<boardSize;i+=6){		//4 bo jeszcze to puste
+				for(int j=4;j<boardSize;j+=6)
+					g.fillOval(i * fieldSize - dotSize/2,j * fieldSize - dotSize/2, 10, dotSize);
+			}
 		}
-		for(int x=0; x<fieldCount; x++){		//pionki
-			for(int y=0; y<fieldCount; y++){
+		for(int x=0; x<boardSize; x++){		//pionki
+			for(int y=0; y<boardSize; y++){
 				if(board[x][y]!=0){
 					if(board[x][y] == Move.WHITE_NUMBER)
 						g.setColor(Color.WHITE);
@@ -59,8 +61,9 @@ public class GamePanel extends JPanel {
 		
 		
 	}
-	public GamePanel(){
-		size=fieldSize*(fieldCount+1);
+	public GamePanel(int boardSize){
+		this.boardSize = boardSize;
+		size=fieldSize*(boardSize+1);
 		setPreferredSize(new Dimension(size,size));
 		setSize(size,size);
 		boardColor= new Color(219,178,92);		//Brown
@@ -85,7 +88,7 @@ public class GamePanel extends JPanel {
 		return pawnSize;
 	}
 	public int getFieldCount() {
-		return fieldCount;
+		return boardSize;
 	}
 	
 }

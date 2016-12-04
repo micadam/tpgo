@@ -4,9 +4,9 @@ public class GoClient {
 	GoGameWindow goGameWindow;
 	GoGameManager goGameManager;
 	
-	public GoClient(GoGameManager goGameManager, GoGameWindow goGameWindow){		
-		this.goGameWindow = goGameWindow;
+	public GoClient(GoGameManager goGameManager){		
 		this.goGameManager = goGameManager;
+		this.goGameWindow = new GoGameWindow(goGameManager.getBoardSize());
 	}
 	
 	public void run(){
@@ -42,7 +42,7 @@ public class GoClient {
 	}
 	public static void main(String[] args){
 
-		GoClient goClient = new GoClient (new GoGameManagerConnected(), new GoGameWindow());
+		GoClient goClient = new GoClient (new GoGameManagerConnected());
 		goClient.run();
 	}
 }

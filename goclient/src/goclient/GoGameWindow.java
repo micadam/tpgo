@@ -50,9 +50,9 @@ public class GoGameWindow extends JFrame {
 		this.setResizable(false);
 	}
 	
-	public GoGameWindow(){
+	public GoGameWindow(int boardSize){
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.gamePanel = new GamePanel();
+		this.gamePanel = new GamePanel(boardSize);
 		this.statusPanel = new StatusPanel();
 		initUI();
 		this.setVisible(true);
