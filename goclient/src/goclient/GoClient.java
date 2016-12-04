@@ -33,7 +33,7 @@ public class GoClient {
 			} else if (gameStatus == 3 ) { //SYNC
 				goGameWindow.setBoard(goGameManager.getBoard());
 			} else if (gameStatus == 4 ) { //REDO
-				goGameWindow.setField(goGameManager.getCancallingMove());
+				goGameWindow.setField(goGameManager.getCancellingMove());
 			} else {
 				System.out.println("Unknown status: " + gameStatus);
 				throw new IllegalArgumentException();

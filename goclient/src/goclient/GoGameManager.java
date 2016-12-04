@@ -7,5 +7,5 @@ public interface GoGameManager {
 	public Move getResponse();
 	public int getGameStatus();
 	public String getStatusMessage();
-	public Move getCancallingMove();
+	public Move getCancellingMove();
 }

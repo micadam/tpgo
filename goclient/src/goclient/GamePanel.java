@@ -42,8 +42,8 @@ public class GamePanel extends JPanel {
 			for(int j=4;j<fieldCount;j+=6)
 				g.fillOval(i * fieldSize - dotSize/2,j * fieldSize - dotSize/2, 10, dotSize);
 		}
-		for(int x=0;x<fieldCount;x++){		//pionki
-			for(int y=0;y<fieldCount;y++){
+		for(int x=0; x<fieldCount; x++){		//pionki
+			for(int y=0; y<fieldCount; y++){
 				if(board[x][y]!=0){
 					if(board[x][y] == Move.WHITE_NUMBER)
 						g.setColor(Color.WHITE);

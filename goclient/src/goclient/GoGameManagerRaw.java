@@ -79,7 +79,7 @@ public class GoGameManagerRaw implements GoGameManager {
 
 
 	@Override
-	public Move getCancallingMove() {
+	public Move getCancellingMove() {
 		// TODO Auto-generated method stub
 		return null;
 	}

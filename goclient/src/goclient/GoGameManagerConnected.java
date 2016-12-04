@@ -124,7 +124,7 @@ public class GoGameManagerConnected implements GoGameManager {
 		return currentStatusMessage;
 	}
 	@Override 
-	public Move getCancallingMove(){
+	public Move getCancellingMove(){
 		return cancellingMove;
 	}
 	

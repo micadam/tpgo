@@ -15,15 +15,18 @@ public class CaptureRule implements GameRule {
 	}
 	
 	@Override
-	public boolean verifyMove(int x, int y, int[][] gameBoard) {
+	public int verifyMove(int x, int y, int[][] gameBoard, int color) {
 		int boardSize = gameBoard[0].length;
+		
 		boolean visited[][] = new boolean[boardSize][boardSize];	//whether or not we visited a given piece, default is false
 		int groupOf[][] = new int[boardSize][boardSize];				//group of a piece, if it's unimportant it will remain as -1
+		
 		for(int i = 0; i < boardSize; i++) {
 			for(int j = 0; j < boardSize; j++) {
 				groupOf[i][j] = -1;
 			}
 		}
+		
 		groupOf[x][y] = 0;					//the number 0 group is reserved for the most recently placed piece
 		visited[x][y] = true;
 		int currentGroup = 0;
@@ -40,14 +43,14 @@ public class CaptureRule implements GameRule {
 				int workingGroup = -1;
 				int workingColor = -100;
 				
-				if(gameBoard[newX][newY] == gameBoard[x][y]) {	//this is here to check if the player commited suicide (I'm not sure wether this is allowed)
+				if(gameBoard[newX][newY] == color) {	//this is here to check if the player commited suicide (I'm not sure wether this is allowed)
 					workingGroup = 0;															//set the working group to the active player group
-					workingColor = gameBoard[x][y];
-				} else if (gameBoard[newX][newY] == -1 * gameBoard[x][y]) { //there's an opponent's piece on the intersection
+					workingColor = color;
+				} else if (gameBoard[newX][newY] == -1 * color) { //there's an opponent's piece on the intersection
 					currentGroup++;																			//this is a non-visited piece, so we're in a new group of pieces
 					breathsOfGroup.add(0);																//we need to add a number of breaths entry for the group
 					workingGroup = currentGroup;
-					workingColor = -1 * gameBoard[x][y];
+					workingColor = -1 * color;
 				} else if (gameBoard[newX][newY] == 0) {						//the active player's group has one more breath thanks to this free intersection
 					breathsOfGroup.set(0, breathsOfGroup.get(0) + 1);
 					continue;
@@ -76,7 +79,34 @@ public class CaptureRule implements GameRule {
 			}
 		}
 		
-		boolean boardChanged = false;
+		
+		boolean enemyCaptured = false;
+		if(breathsOfGroup.size() > 1) {
+			for(int i = 1; i < breathsOfGroup.size(); i++) {
+				if(breathsOfGroup.get(i) == 0) {
+					enemyCaptured = true;
+					break;
+				}
+			}
+		}
+		
+		if(enemyCaptured == false && breathsOfGroup.get(0) == 0) {
+			return -1;
+		}
+		
+		for(int i = 0; i < boardSize; i++) {	
+			for(int j = 0; j < boardSize; j++) {
+				if(groupOf[j][i] != -1) {					
+					System.out.print(groupOf[j][i]);
+				} else {
+					System.out.print(".");
+				}
+			}
+			System.out.print('\n');
+		}
+		
+		
+		int boardChanged = 0;
 		//check the board for groups with no breaths;
 		System.out.println(breathsOfGroup);
 		for(int i = 0; i < boardSize; i++) {
@@ -84,7 +114,7 @@ public class CaptureRule implements GameRule {
 				if(groupOf[i][j] != -1 && breathsOfGroup.get(groupOf[i][j]) == 0) {
 					System.out.println("[SERVER]Removing piece group " + groupOf[i][j]);
 					gameBoard[i][j] = 0;
-					boardChanged = true;
+					boardChanged = 1;
 				}
 			}
 		}

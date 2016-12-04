@@ -40,6 +40,7 @@ public class GameInstance implements Runnable {
 		currentColor = Move.BLACK_NUMBER;
 		rules = new ArrayList<GameRule>();
 		rules.add(new CaptureRule());
+		
 		boolean gameOver = false;
 		while(gameOver == false) {
 			Player currentPlayer = (currentColor == Move.BLACK_NUMBER ? blackPlayer : whitePlayer);
@@ -62,20 +63,31 @@ public class GameInstance implements Runnable {
 				currentPlayer.sendCancellingMove(new Move(x,y,gameBoard[x][y]));
 				currentColor *= -1;			
 			} else {
-				gameBoard[x][y] = currentColor;
-				currentPlayer.sendResponse("OK");
-				boolean boardChanged = false;
+				int boardChanged = 0;
 				for(GameRule gameRule : rules) {
-					boolean result =  gameRule.verifyMove(x, y, gameBoard);
-					boardChanged = (boardChanged || result);
-					System.out.println("PP" + boardChanged + result);
+					int result =  gameRule.verifyMove(x, y, gameBoard, currentColor);
+					if(result == -1) {
+						boardChanged = -1;
+						break;
+					}
+					boardChanged = boardChanged + result;
 				}
-				if(boardChanged) {
+				if(boardChanged > 0) {
+					gameBoard[x][y] = currentColor;
+					currentPlayer.sendResponse("OK");
 					currentPlayer.sendResponse("SYNC");
 					notCurrentPlayer.sendResponse("SYNC");
 					sendBoardToPlayers();
+				} else if(boardChanged == -1) {
+					currentPlayer.sendResponse("NO");
+					currentPlayer.sendCancellingMove(new Move(x,y,gameBoard[x][y]));
+					currentColor *= -1;			
+				} else {
+					gameBoard[x][y] = currentColor;
+					currentPlayer.sendResponse("OK");
+					notCurrentPlayer.sendOpponentsMove(new Move(x, y, currentColor));
+					
 				}
-				notCurrentPlayer.sendOpponentsMove(new Move(x, y, currentColor));
 				
 			}
 			
