@@ -1,21 +1,21 @@
 package goclient;
 
-import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JCheckBox;
-import javax.swing.JSeparator;
-import javax.swing.JComboBox;
-import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 
 public class AuthWindow extends JDialog {
 	JLabel addressLabel;
@@ -191,6 +191,7 @@ public class AuthWindow extends JDialog {
 		setSize(357, 318);
 		prepareUI(goGameManagerConnected);
 		setVisible(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 	}
 }

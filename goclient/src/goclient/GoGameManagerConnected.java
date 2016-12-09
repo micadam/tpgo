@@ -20,6 +20,7 @@ public class GoGameManagerConnected implements GoGameManager {
 	private PrintWriter out;
 	private Move lastOpponentsMove;
 	private Move cancellingMove;
+	private boolean connectionEstabilished=false;
 	private int boardSize;
 	private String currentStatusMessage = "DUMMYTEXT";
 	
@@ -133,8 +134,12 @@ public class GoGameManagerConnected implements GoGameManager {
 		return cancellingMove;
 	}
 	
-	public GoGameManagerConnected() {
+	public GoGameManagerConnected() throws IllegalStateException {
+		connectionEstabilished=false;
 		AuthWindow aw = new AuthWindow(this);
+		if(!connectionEstabilished){
+			throw new IllegalStateException("Connection not initialized");
+		}
 	}
 	
 	
@@ -165,6 +170,7 @@ public class GoGameManagerConnected implements GoGameManager {
 			e.printStackTrace();
 			return "Connection failed";
 		}	
+		connectionEstabilished=true;
 		return null;
 	}
 	

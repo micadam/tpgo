@@ -14,7 +14,7 @@ public class GoClient {
 		while(!exit){			//TODO exit handling 
 			int answer=-1;
 			int gameStatus = 0;
-			Move move;
+			Move move;	
 			Move response;
 			
 			
@@ -41,8 +41,14 @@ public class GoClient {
 		}
 	}
 	public static void main(String[] args){
-
-		GoClient goClient = new GoClient (new GoGameManagerConnected());
-		goClient.run();
+		
+		try{
+			GoGameManagerConnected goGameManagerConnected=new GoGameManagerConnected();
+			GoClient goClient = new GoClient (goGameManagerConnected);
+			goClient.run();
+		}catch(IllegalStateException e){
+			System.out.println("Client could not be initialized: "+e.getMessage());
+		}
+		System.exit(0);
 	}
 }
