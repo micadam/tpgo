@@ -43,7 +43,8 @@ public class GameInstance implements Runnable {
 		currentColor = Move.BLACK_NUMBER;
 		rules = new ArrayList<GameRule>();
 		rules.add(new CaptureRule());
-		
+		Player loser=blackPlayer;
+		Player winner=whitePlayer;
 		boolean gameOver = false;
 		while(gameOver == false) {
 			Player currentPlayer = (currentColor == Move.BLACK_NUMBER ? blackPlayer : whitePlayer);
@@ -56,8 +57,13 @@ public class GameInstance implements Runnable {
 			if(x == -1) {
 				currentPlayer.sendResponse("OK");
 				System.out.println("Player passed");
-			}
-			else if( x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE ) {
+			}else if(x==-2){		//surrender
+				currentPlayer.sendResponse("OK");
+				gameOver=true;
+				winner=notCurrentPlayer;
+				loser=currentPlayer;
+				System.out.println("Game is over, winner is player: " + -1*currentColor);
+			}else if( x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE ) {
 				currentPlayer.sendResponse("NO");
 				currentColor *= -1;			//the player who played an invalid move moves again
 				
@@ -96,6 +102,8 @@ public class GameInstance implements Runnable {
 			
 			currentColor *= -1;
 		}
+		winner.sendResponse("END WIN");
+		loser.sendResponse("END LOSE");
 		
 	}
 	

@@ -1,7 +1,5 @@
 package goclient;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +13,7 @@ public class StatusPanel extends JPanel {
 	JButton surrenderButton;
 	JButton passButton;
 	PassListener passListener;
+	SurrenderListener surrenderListener;
 	JButton territoriesButton;
 	
 	JLabel statusLabel;
@@ -26,11 +25,16 @@ public class StatusPanel extends JPanel {
 		passListener.setMove(move);
 		passButton.addActionListener(passListener);
 		passButton.setEnabled(true);
+		surrenderListener.setMove(move);
+		surrenderButton.addActionListener(surrenderListener);
+		surrenderButton.setEnabled(true);
 	}
 	
 	public void stopWaitingForMove() {
 		passButton.removeActionListener(passListener);
 		passButton.setEnabled(false);
+		surrenderButton.removeActionListener(surrenderListener);
+		surrenderButton.setEnabled(false);
 	}
 	public void setStatusMessage(String status) {
 		statusLabel.setText(status);
@@ -61,10 +65,24 @@ public class StatusPanel extends JPanel {
 	
 	public StatusPanel() {
 		passListener = new PassListener();
+		surrenderListener=new SurrenderListener();
 		initUI();
 		
 	}
 
+}
+class SurrenderListener implements ActionListener{
+	Move move;
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		synchronized(move) {					
+			move.setX(-2);
+			move.setY(-2);
+		}
+	}
+	public void setMove(Move move) {
+		this.move = move;
+	}
 }
 
 class PassListener implements ActionListener{

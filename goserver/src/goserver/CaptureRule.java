@@ -7,13 +7,21 @@ import java.util.List;
 public class CaptureRule implements GameRule {
 	int whitePrisoners;
 	int blackPrisoners;
+	private LinkedList<Move> forbiddenByKo= new LinkedList<Move>();
 	
 	static int directions[][] = { {0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
 	private boolean fieldInBounds(int x, int y, int boardSize) {
 		return (x >= 0 && x < boardSize && y >= 0 && y < boardSize); //check if the field is inside the board (is not invalid)
 	}
-	
+	private boolean koRule(int x, int y){
+		for(Move move : forbiddenByKo){
+			if(move.getX()==x && move.getY()==y){
+				return true;
+			}
+		}
+		return false;
+	}
 	@Override
 	public int verifyMove(int x, int y, int[][] gameBoard, int color) {
 		int boardSize = gameBoard[0].length;
@@ -93,6 +101,11 @@ public class CaptureRule implements GameRule {
 		if(enemyCaptured == false && breathsOfGroup.get(0) == 0) {
 			return -1;
 		}
+		if(enemyCaptured == true && koRule(x,y)){
+			System.out.println("Ko Rule");
+			return -1;
+		}
+		forbiddenByKo.clear();
 		
 		for(int i = 0; i < boardSize; i++) {	
 			for(int j = 0; j < boardSize; j++) {
@@ -114,6 +127,8 @@ public class CaptureRule implements GameRule {
 				if(groupOf[i][j] != -1 && breathsOfGroup.get(groupOf[i][j]) == 0) {
 					System.out.println("[SERVER]Removing piece group " + groupOf[i][j]);
 					gameBoard[i][j] = 0;
+					forbiddenByKo.add(new Move(i,j,0));		//add captured territory to forbidden list 
+															//so it can't be reused for capture in the next move
 					boardChanged = 1;
 				}
 			}

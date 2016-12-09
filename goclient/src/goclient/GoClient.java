@@ -34,10 +34,18 @@ public class GoClient {
 				goGameWindow.setBoard(goGameManager.getBoard());
 			} else if (gameStatus == 4 ) { //REDO
 				goGameWindow.setField(goGameManager.getCancellingMove());
-			} else {
+			} else if (gameStatus == 5 ) { //END
+				exit=true;
+			}else {
 				System.out.println("Unknown status: " + gameStatus);
 				throw new IllegalArgumentException();
 			}
+		}
+		try {
+			wait(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	public static void main(String[] args){

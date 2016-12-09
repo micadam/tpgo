@@ -49,6 +49,9 @@ public class GoGameManagerConnected implements GoGameManager {
 				int color = Integer.parseInt(statusTokens[3]);
 				cancellingMove = new Move(x, y, color);
 				return 4;
+			} else if(statusTokens[0].equals("END")){
+				currentStatusMessage="YOU "+ statusTokens[1];
+				return 5;
 			}else {
 				System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
 				return -100;
