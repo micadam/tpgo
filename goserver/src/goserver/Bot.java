@@ -5,14 +5,18 @@ import java.util.Random;
 public class Bot implements Player {
 	private Move opponentsMove;
 	private Random random;
+	private Move rejectedMove=new Move(-123,-123,0);
+	private int wrongMoveCount;
+	private Move myLastMove=new Move(-123,-123,0);
 	private int[][] gameBoard;
-	private static int BOARD_SIZE = 19;
+	private final int BOARD_SIZE;
 
 	@Override
 	public Move getMove() {
-		// TODO Auto-generated method stub
 		Move move = null;
-		if (opponentsMove != null) {
+		if(wrongMoveCount>10){
+			move=new Move(-1,-1,0);	//pass
+		} else if (opponentsMove != null) {
 			if (opponentsMove.getX() == -1) {
 				// TODO, change sendOpponentsMove to access this code
 			} else {
@@ -29,7 +33,8 @@ public class Bot implements Player {
 						int moveX = x + i - 1;
 						int moveY = y + j - 1;
 						if (moveX >= 0 && moveY >= 0 && moveX < BOARD_SIZE && moveY < BOARD_SIZE
-								&& gameBoard[moveX][moveY] == 0) {
+								&& gameBoard[moveX][moveY] == 0 && moveX!=rejectedMove.getX()&& moveY!=rejectedMove.getY()){
+								
 							move = new Move(moveX, moveY, 0);
 							break;
 						}
@@ -40,7 +45,7 @@ public class Bot implements Player {
 				if (move == null) { // weak bot mode
 					for (int i = 0; i < BOARD_SIZE; i++) {
 						for (int j = 0; j < BOARD_SIZE; j++) {
-							if (gameBoard[i][j] == 0) {
+							if (gameBoard[i][j] == 0 && i!=rejectedMove.getX()&& j!=rejectedMove.getY()) {
 								move = new Move(i, j, 0);
 								break;
 							}
@@ -51,12 +56,18 @@ public class Bot implements Player {
 		} else {
 			move = new Move(random.nextInt(BOARD_SIZE), random.nextInt(BOARD_SIZE), 0);
 		}
+		myLastMove=move;
 		return move;
 	}
 
 	@Override
 	public void sendResponse(String response) {
-		// TODO Auto-generated method stub
+		if(response.equals("NO")){
+			wrongMoveCount++;
+			rejectedMove=myLastMove;
+		}else{
+			wrongMoveCount=0;
+		}
 
 	}
 
@@ -102,8 +113,8 @@ public class Bot implements Player {
 
 	@Override
 	public void sendCancellingMove(Move move) {
-		// TODO Auto-generated method stub
-
+		rejectedMove=move;
+		gameBoard[move.getX()][move.getY()]=move.getColor();
 	}
 
 }
