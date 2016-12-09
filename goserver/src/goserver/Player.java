@@ -9,4 +9,5 @@ public interface Player {
 	public void sendOpponentsMove(Move move);
 	public void sendBoard(String boardRaw, int boardSize);
 	public void sendCancellingMove(Move move);
+	public void endCommunication();
 }

@@ -117,4 +117,10 @@ public class Bot implements Player {
 		gameBoard[move.getX()][move.getY()]=move.getColor();
 	}
 
+	@Override
+	public void endCommunication() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

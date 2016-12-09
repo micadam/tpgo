@@ -103,7 +103,9 @@ public class GameInstance implements Runnable {
 			currentColor *= -1;
 		}
 		winner.sendResponse("END WIN");
-		loser.sendResponse("END LOSE");
+		loser.sendResponse("END LOSE");	
+		winner.endCommunication();
+		loser.endCommunication();
 		
 	}
 	

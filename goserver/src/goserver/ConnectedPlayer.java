@@ -74,4 +74,16 @@ public class ConnectedPlayer implements Player {
 		
 	}
 
+	@Override
+	public void endCommunication() {
+		try {
+			out.close();	
+			in.close();
+		} catch (IOException e) {
+			System.out.println("[ConnectedPlayer] end communication IOException");
+			e.printStackTrace();
+		}
+	}
+	
+
 }
