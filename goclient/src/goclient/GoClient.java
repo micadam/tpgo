@@ -11,7 +11,6 @@ public class GoClient {
 	
 	public void run(){
 		boolean exit=false;
-		int reconnections=1;
 		while(!exit){			//TODO exit handling 
 			int answer=-1;
 			int gameStatus = 0;
@@ -37,6 +36,10 @@ public class GoClient {
 				goGameWindow.setField(goGameManager.getCancellingMove());
 			} else if (gameStatus == 5 ) { //END
 				exit=true;
+			}else if (gameStatus == 6 ) { //TERRITORIES START
+				goGameWindow.setTerritoriesMode(true);
+			}else if (gameStatus == 7 ) { //TERRITORIES END
+				goGameWindow.setTerritoriesMode(false);
 			}else if(gameStatus == -100){
 				System.out.println("Unknown status: " + gameStatus);
 				throw new IllegalArgumentException();

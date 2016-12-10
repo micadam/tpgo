@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CaptureRule implements GameRule {
-	int whitePrisoners;
-	int blackPrisoners;
+	int whitePrisoners=0;
+	int blackPrisoners=0;
 	private LinkedList<Move> forbiddenByKo= new LinkedList<Move>();
 	
 	static int directions[][] = { {0, 1}, {1, 0}, {0, -1}, {-1, 0}};
@@ -21,6 +21,12 @@ public class CaptureRule implements GameRule {
 			}
 		}
 		return false;
+	}
+	public void dismissKo(){
+		forbiddenByKo.clear();
+	}
+	public int getScore(){
+		return blackPrisoners-whitePrisoners;
 	}
 	@Override
 	public int verifyMove(int x, int y, int[][] gameBoard, int color) {
@@ -126,6 +132,10 @@ public class CaptureRule implements GameRule {
 			for(int j = 0; j < boardSize; j++) {
 				if(groupOf[i][j] != -1 && breathsOfGroup.get(groupOf[i][j]) == 0) {
 					System.out.println("[SERVER]Removing piece group " + groupOf[i][j]);
+					if(gameBoard[i][j]==1)
+						whitePrisoners++;
+					else
+						blackPrisoners++;
 					gameBoard[i][j] = 0;
 					forbiddenByKo.add(new Move(i,j,0));		//add captured territory to forbidden list 
 															//so it can't be reused for capture in the next move

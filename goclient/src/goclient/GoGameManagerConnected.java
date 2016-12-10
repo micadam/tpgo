@@ -49,6 +49,13 @@ public class GoGameManagerConnected implements GoGameManager {
 					in.close();
 					out.close();
 					return 5;
+				} else if(statusTokens[0].equals("TERRITORIES")){
+					if(statusTokens[1].equals("START")){
+						currentStatusMessage="TERRITORIES MODE";
+						return 6;
+					}else{
+						return 7;
+					}
 				}else {
 					System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
 					return -100;

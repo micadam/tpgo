@@ -18,9 +18,16 @@ public class GamePanel extends JPanel {
 	private Color boardColor;
 	private int[][] board= new int[boardSize][boardSize];
 	MoveListener moveListener;
+	private boolean territoriesMode=false;
+	private int[][] territories = new int[boardSize][boardSize];
 	
 	public void makeMove(Move move){
-		board[move.getX()][move.getY()]=move.getColor();
+		System.out.println("Opponent's move received");
+		if(territoriesMode){
+			territories[move.getX()][move.getY()]=move.getColor();
+		}else{
+			board[move.getX()][move.getY()]=move.getColor();
+		}
 		repaint();
 	}
 	public void setBoard(int[][] board){
@@ -58,6 +65,22 @@ public class GamePanel extends JPanel {
 				}
 			}
 		}
+		if(territoriesMode){
+			for(int x=0; x<boardSize; x++){		//pionki
+				for(int y=0; y<boardSize; y++){
+					if(territories[x][y]!=0){
+						if(territories[x][y] >0 )
+							g.setColor(Color.GREEN);
+						else if(territories[x][y] < 0) {						
+							g.setColor(Color.RED);
+						} else {
+							throw new IllegalArgumentException();
+						}
+						g.drawRect(fieldSize + x * fieldSize - pawnSize/2, fieldSize + y * fieldSize - pawnSize/2, pawnSize, pawnSize);
+					}
+				}
+			}
+		}
 		
 		
 	}
@@ -89,6 +112,16 @@ public class GamePanel extends JPanel {
 	}
 	public int getFieldCount() {
 		return boardSize;
+	}
+	public void setTerritoriesMode(boolean mode) {
+		this.territoriesMode=mode;
+		if(mode==true){
+			for(int i=0;i<boardSize;i++){
+				for(int j=0;j<boardSize;j++){
+					territories[i][j]=0;
+				}
+			}
+		}
 	}
 	
 }
