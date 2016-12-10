@@ -10,6 +10,7 @@ public class GameInstance implements Runnable {
 	private int[][] gameBoard;
 	private List<GameRule> rules;
 	int currentColor;
+	private GoServer goServer;
 	
 	Player whitePlayer;
 	Player blackPlayer;
@@ -106,7 +107,7 @@ public class GameInstance implements Runnable {
 		loser.sendResponse("END LOSE");	
 		winner.endCommunication();
 		loser.endCommunication();
-		
+		goServer.remove(this);
 	}
 	
 	private void sendBoardToPlayers() {
@@ -125,10 +126,11 @@ public class GameInstance implements Runnable {
 		blackPlayer.sendBoard(boardRaw, BOARD_SIZE);
 	}
 	
-	public GameInstance(Player player, String keyCode, int boardSize) {
+	public GameInstance(Player player, String keyCode, int boardSize,GoServer goServer) {
 		blackPlayer = player;
 		this.keyCode = keyCode;
 		BOARD_SIZE = boardSize;
+		this.goServer=goServer;
 	}
 
 }

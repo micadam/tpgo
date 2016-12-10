@@ -47,7 +47,7 @@ public class GoServer {
 					}
 					if(okay) {
 						out.println("OK");
-						GameInstance gi = new GameInstance(new ConnectedPlayer(playerSocket), messageTokens[1], Integer.parseInt(messageTokens[2]));
+						GameInstance gi = new GameInstance(new ConnectedPlayer(playerSocket), messageTokens[1], Integer.parseInt(messageTokens[2]),this);
 							if(messageTokens[3].equals("BOT")){								
 								gi.addPlayer(new Bot(Integer.parseInt(messageTokens[2])));
 							}
@@ -85,7 +85,9 @@ public class GoServer {
 				}
 		}
 	}
-	
+	public void remove(GameInstance game){
+		games.remove(game);
+	}
 	
 	public static void main(String[] args) {
 		GoServer goServer = new GoServer();
