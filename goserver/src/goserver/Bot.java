@@ -14,7 +14,7 @@ public class Bot implements Player {
 	@Override
 	public Move getMove() {
 		Move move = null;
-		if(wrongMoveCount>10){
+		if(wrongMoveCount>=BOARD_SIZE*BOARD_SIZE){
 			move=new Move(-1,-1,0);	//pass
 		} else if (opponentsMove != null) {
 			if (opponentsMove.getX() == -1) {

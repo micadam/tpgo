@@ -46,7 +46,7 @@ public class StatusPanel extends JPanel {
 		gameTime = new JLabel("DUMMYTEXT");
 		this.add(gameTime);
 		
-		statusLabel = new JLabel("DUMMYTEXT");
+		statusLabel = new JLabel("Waiting for second player");
 		this.add(statusLabel);
 		
 		passButton = new JButton("Pass");
