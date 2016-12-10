@@ -3,7 +3,7 @@ package goserver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameInstance implements Runnable {
+public class GameInstance extends Thread {
 	
 	Thread thread;
 	private static int BOARD_SIZE = 19;
@@ -15,12 +15,13 @@ public class GameInstance implements Runnable {
 	Player whitePlayer;
 	Player blackPlayer;
 	
-	private int currentState;
+	//private int currentState;
 	private String keyCode;
-	
+	/*
 	public int getState() {
 		return currentState;
 	}
+	*/
 	public int getBoardSize() {
 		return BOARD_SIZE;
 	}
@@ -55,6 +56,20 @@ public class GameInstance implements Runnable {
 			Move move = currentPlayer.getMove();
 			int x = move.getX();
 			int y = move.getY();
+			int timeout=50;
+			while(x==-100 && timeout>0){
+				try {
+					sleep(100);
+					move=currentPlayer.getMove();
+					x=move.getX();
+					timeout--;
+				} catch (InterruptedException e) {
+					System.out.println("[Gmae Instance] timeout interrupt( InterruptedException)");
+				}
+			}
+			if(timeout==0){
+				x=-2;
+			}
 			if(x == -1) {
 				currentPlayer.sendResponse("OK");
 				System.out.println("Player passed");

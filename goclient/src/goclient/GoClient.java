@@ -11,6 +11,7 @@ public class GoClient {
 	
 	public void run(){
 		boolean exit=false;
+		int reconnections=1;
 		while(!exit){			//TODO exit handling 
 			int answer=-1;
 			int gameStatus = 0;
@@ -36,13 +37,16 @@ public class GoClient {
 				goGameWindow.setField(goGameManager.getCancellingMove());
 			} else if (gameStatus == 5 ) { //END
 				exit=true;
-			}else {
+			}else if(gameStatus == -100){
 				System.out.println("Unknown status: " + gameStatus);
 				throw new IllegalArgumentException();
+			}else{
+				System.out.println("Fatal error, game ended unexpectedly");
+				exit=true;
 			}
 		}
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

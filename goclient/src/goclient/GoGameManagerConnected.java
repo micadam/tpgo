@@ -18,43 +18,53 @@ public class GoGameManagerConnected implements GoGameManager {
 	
 	@Override
 	public int getGameStatus() {
-		try{
-			String status = in.readLine();
-			System.out.println("[CLIENT] Response in geGameStatus(): "+ status);
-			String[] statusTokens = status.split("\\s+");
-			if(statusTokens[0].equals("GO")) {
-				int color = Integer.parseInt(statusTokens[1]);
-				String colorString = (color == Move.WHITE_NUMBER ? "White" : "Black");
-				currentStatusMessage = "Your move: " + colorString;
-				return color;
-			} else if (statusTokens[0].equals("OPPONENT")) {
-				int x = Integer.parseInt(statusTokens[1]);
-				int y = Integer.parseInt(statusTokens[2]);
-				int color = Integer.parseInt(statusTokens[3]);
-				lastOpponentsMove = new Move(x, y, color);
-				return 2;
-			} else if(statusTokens[0].equals("SYNC")) {
-				return 3;
-			} else if (statusTokens[0].equals("REDO")) {
-				int x = Integer.parseInt(statusTokens[1]);
-				int y = Integer.parseInt(statusTokens[2]);
-				int color = Integer.parseInt(statusTokens[3]);
-				cancellingMove = new Move(x, y, color);
-				return 4;
-			} else if(statusTokens[0].equals("END")){
-				currentStatusMessage="YOU "+ statusTokens[1];
-				System.out.println("[Client] END received");
-				in.close();
-				out.close();
-				return 5;
-			}else {
-				System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
-				return -100;
-			}
-		} catch (IOException ioe) {
-			System.out.println("[CLIENT] IOException in getGameStatus();");
-			return -100;
-		}	
+		int timeout=50;
+		while(timeout>0){
+			try{
+				String status = in.readLine();
+				System.out.println("[CLIENT] Response in geGameStatus(): "+ status);
+				String[] statusTokens = status.split("\\s+");
+				if(statusTokens[0].equals("GO")) {
+					int color = Integer.parseInt(statusTokens[1]);
+					String colorString = (color == Move.WHITE_NUMBER ? "White" : "Black");
+					currentStatusMessage = "Your move: " + colorString;
+					return color;
+				} else if (statusTokens[0].equals("OPPONENT")) {
+					int x = Integer.parseInt(statusTokens[1]);
+					int y = Integer.parseInt(statusTokens[2]);
+					int color = Integer.parseInt(statusTokens[3]);
+					lastOpponentsMove = new Move(x, y, color);
+					return 2;
+				} else if(statusTokens[0].equals("SYNC")) {
+					return 3;
+				} else if (statusTokens[0].equals("REDO")) {
+					int x = Integer.parseInt(statusTokens[1]);
+					int y = Integer.parseInt(statusTokens[2]);
+					int color = Integer.parseInt(statusTokens[3]);
+					cancellingMove = new Move(x, y, color);
+					return 4;
+				} else if(statusTokens[0].equals("END")){
+					currentStatusMessage="YOU "+ statusTokens[1];
+					System.out.println("[Client] END received");
+					in.close();
+					out.close();
+					return 5;
+				}else {
+					System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
+					return -100;
+				}
+			} catch (IOException ioe) {
+				System.out.println("[CLIENT] IOException in getGameStatus();");
+				timeout--;
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					System.out.println("[Client] timeout interruption");
+				}
+			}	
+		}
+		System.out.println("[Client] failed to reconnect to the server");
+		return -200;
 	}
 	
 	@Override
