@@ -32,6 +32,7 @@ public class CaptureRuleTest {
 		board[2][1]=1;
 		assertTrue("Ko rule not spotted",captureRule.verifyMove(1, 1, board, -1)==-1);
 	}
+	
 	@Test
 	public void testSuicideRule(){
 		assertEquals("Suicide in that possition should not be possible",captureRule.verifyMove(0,2,board,-1),-1);
@@ -52,7 +53,6 @@ public class CaptureRuleTest {
 		captureRule.verifyMove(2, 1, board, 1);
 		assertFalse("Score should not be zero",captureRule.getScore()==0);
 	}
-	
 	@After
 	public void clear(){
 		captureRule=null;

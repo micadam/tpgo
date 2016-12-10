@@ -7,23 +7,21 @@ import java.util.List;
 public class CaptureRule implements GameRule {
 	int whitePrisoners=0;
 	int blackPrisoners=0;
-	private LinkedList<Move> forbiddenByKo= new LinkedList<Move>();
+	private Move forbiddenByKo= new Move(-100,-100,0);
 	
 	static int directions[][] = { {0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
 	private boolean fieldInBounds(int x, int y, int boardSize) {
 		return (x >= 0 && x < boardSize && y >= 0 && y < boardSize); //check if the field is inside the board (is not invalid)
 	}
-	private boolean koRule(int x, int y){
-		for(Move move : forbiddenByKo){
-			if(move.getX()==x && move.getY()==y){
-				return true;
-			}
+	private boolean koRule(int x, int y,int captured){
+		if(forbiddenByKo.getX()==x && forbiddenByKo.getY()==y && captured==1){
+			return true;
 		}
 		return false;
 	}
 	public void dismissKo(){
-		forbiddenByKo.clear();
+		forbiddenByKo=new Move(-100,-100,0);
 	}
 	public int getScore(){
 		return blackPrisoners-whitePrisoners;
@@ -94,24 +92,25 @@ public class CaptureRule implements GameRule {
 		}
 		
 		
-		boolean enemyCaptured = false;
-		if(breathsOfGroup.size() > 1) {
-			for(int i = 1; i < breathsOfGroup.size(); i++) {
-				if(breathsOfGroup.get(i) == 0) {
-					enemyCaptured = true;
-					break;
+		int captured = 0;
+		for(int i = 0; i < boardSize; i++) {
+			for(int j = 0; j < boardSize; j++) {
+				if(groupOf[i][j] >0 && breathsOfGroup.get(groupOf[i][j]) == 0) {		//do not count suicidal captures
+					captured++;
+					if(captured>1)			//not important 
+						break;
 				}
 			}
 		}
 		
-		if(enemyCaptured == false && breathsOfGroup.get(0) == 0) {
+		if(captured==0 && breathsOfGroup.get(0) == 0) {
 			return -1;
 		}
-		if(enemyCaptured == true && koRule(x,y)){
+		if(koRule(x,y,captured)){
 			System.out.println("Ko Rule");
 			return -1;
 		}
-		forbiddenByKo.clear();
+		dismissKo();
 		
 		for(int i = 0; i < boardSize; i++) {	
 			for(int j = 0; j < boardSize; j++) {
@@ -126,6 +125,7 @@ public class CaptureRule implements GameRule {
 		
 		
 		int boardChanged = 0;
+		captured=0;
 		//check the board for groups with no breaths;
 		System.out.println(breathsOfGroup);
 		for(int i = 0; i < boardSize; i++) {
@@ -136,13 +136,19 @@ public class CaptureRule implements GameRule {
 						whitePrisoners++;
 					else
 						blackPrisoners++;
+					captured++;
 					gameBoard[i][j] = 0;
-					forbiddenByKo.add(new Move(i,j,0));		//add captured territory to forbidden list 
+					if(groupOf[i][j]!=0)
+						forbiddenByKo=new Move(i,j,0);			//remember captured territory 
 															//so it can't be reused for capture in the next move
-					boardChanged = 1;
 				}
 			}
 		}
+		if(captured==1 || ( captured==2 && breathsOfGroup.get(0)==0))
+			System.out.println("Ko rule active");
+		else
+			dismissKo();
+		boardChanged=captured>0?1:0;
 		return boardChanged;
 	}
 }
