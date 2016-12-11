@@ -12,15 +12,19 @@ public class StatusPanel extends JPanel {
 	
 	JButton surrenderButton;
 	JButton passButton;
-	PassListener passListener;
-	SurrenderListener surrenderListener;
-	JButton territoriesButton;
+	ButtonListener passListener;
+	ButtonListener surrenderListener;
+	ButtonListener disagreeListener;
+	JButton disagreeButton;
 	
 	JLabel statusLabel;
 	
 	JLabel gameTime;
+	private boolean territoriesMode=false;
 
-	
+	public void setTerritoriesmode(boolean mode){
+		this.territoriesMode=mode;
+	}
 	public void waitForMove(Move move) {
 		passListener.setMove(move);
 		passButton.addActionListener(passListener);
@@ -28,6 +32,11 @@ public class StatusPanel extends JPanel {
 		surrenderListener.setMove(move);
 		surrenderButton.addActionListener(surrenderListener);
 		surrenderButton.setEnabled(true);
+		if(territoriesMode){
+			disagreeListener.setMove(move);
+			disagreeButton.addActionListener(disagreeListener);
+			disagreeButton.setEnabled(true);
+		}
 	}
 	
 	public void stopWaitingForMove() {
@@ -35,6 +44,10 @@ public class StatusPanel extends JPanel {
 		passButton.setEnabled(false);
 		surrenderButton.removeActionListener(surrenderListener);
 		surrenderButton.setEnabled(false);
+		if(territoriesMode){
+			disagreeButton.removeActionListener(disagreeListener);
+			disagreeButton.setEnabled(false);
+		}
 	}
 	public void setStatusMessage(String status) {
 		statusLabel.setText(status);
@@ -52,9 +65,9 @@ public class StatusPanel extends JPanel {
 		passButton = new JButton("Pass");
 		this.add(passButton);
 		passButton.setEnabled(false);
-		territoriesButton = new JButton("Territories");
-		this.add(territoriesButton);
-		territoriesButton.setEnabled(false);
+		disagreeButton = new JButton("Disagree");
+		this.add(disagreeButton);
+		disagreeButton.setEnabled(false);
 		surrenderButton = new JButton("Surrender");
 		this.add(surrenderButton);
 		surrenderButton.setEnabled(false);
@@ -64,37 +77,28 @@ public class StatusPanel extends JPanel {
 	}
 	
 	public StatusPanel() {
-		passListener = new PassListener();
-		surrenderListener=new SurrenderListener();
+		passListener = new ButtonListener(-1);
+		surrenderListener=new ButtonListener(-2);
+		disagreeListener= new ButtonListener(-3);
 		initUI();
 		
 	}
 
 }
-class SurrenderListener implements ActionListener{
+class ButtonListener implements ActionListener{
 	Move move;
+	private int value;
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		synchronized(move) {					
-			move.setX(-2);
-			move.setY(-2);
+			move.setX(value);
+			move.setY(value);
 		}
 	}
 	public void setMove(Move move) {
 		this.move = move;
 	}
-}
-
-class PassListener implements ActionListener{
-	Move move;
-	@Override
-	public void actionPerformed(ActionEvent ae) {
-		synchronized(move) {					
-			move.setX(-1);
-			move.setY(-1);
-		}
-	}
-	public void setMove(Move move) {
-		this.move = move;
+	public ButtonListener(int value){
+		this.value=value;
 	}
 }

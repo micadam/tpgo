@@ -33,6 +33,7 @@ public class GoGameWindow extends JFrame {
 	}
 	public void setTerritoriesMode(boolean mode){
 		gamePanel.setTerritoriesMode(mode);
+		statusPanel.setTerritoriesmode(mode);
 	}
 	public void setStatusMessage(String message) {
 		statusPanel.setStatusMessage(message);

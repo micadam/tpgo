@@ -11,7 +11,7 @@ public class CaptureRule implements GameRule {
 	
 	static int directions[][] = { {0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
-	private boolean fieldInBounds(int x, int y, int boardSize) {
+	static private boolean fieldInBounds(int x, int y, int boardSize) {
 		return (x >= 0 && x < boardSize && y >= 0 && y < boardSize); //check if the field is inside the board (is not invalid)
 	}
 	private boolean koRule(int x, int y,int captured){
@@ -26,6 +26,7 @@ public class CaptureRule implements GameRule {
 	public int getScore(){
 		return blackPrisoners-whitePrisoners;
 	}
+	
 	@Override
 	public int verifyMove(int x, int y, int[][] gameBoard, int color) {
 		int boardSize = gameBoard[0].length;
@@ -67,7 +68,9 @@ public class CaptureRule implements GameRule {
 					breathsOfGroup.set(0, breathsOfGroup.get(0) + 1);
 					continue;
 				}
-				
+				int breaths=Algorithm.getBreathsOfThisGroup(newX,newY,visited,groupOf,gameBoard,workingGroup,workingColor,0);
+				breathsOfGroup.set(workingGroup, breaths);
+				/*
 				xQueue.push(newX);
 				yQueue.push(newY);
 				while(xQueue.isEmpty() == false) {								//keep adding pieces until we visited the whole group
@@ -88,6 +91,7 @@ public class CaptureRule implements GameRule {
 						}
 					}
 				}
+				*/
 			}
 		}
 		

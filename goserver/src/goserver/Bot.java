@@ -10,11 +10,12 @@ public class Bot implements Player {
 	private Move myLastMove=new Move(-123,-123,0);
 	private int[][] gameBoard;
 	private final int BOARD_SIZE;
+	private boolean territoriesMode=false;
 
 	@Override
 	public Move getMove() {
 		Move move = null;
-		if(wrongMoveCount>=BOARD_SIZE*BOARD_SIZE){
+		if(wrongMoveCount>=BOARD_SIZE*BOARD_SIZE || territoriesMode){
 			move=new Move(-1,-1,0);	//pass
 		} else if (opponentsMove != null) {
 			if (opponentsMove.getX() == -1) {
@@ -65,7 +66,11 @@ public class Bot implements Player {
 		if(response.equals("NO")){
 			wrongMoveCount++;
 			rejectedMove=myLastMove;
-		}else{
+		} else if(response.equals("TERRITORIES END")){
+			territoriesMode=false;
+		} else if(response.equals("TERRITORIES START")){
+			territoriesMode=true;
+		} else { //ok 
 			wrongMoveCount=0;
 		}
 
@@ -83,6 +88,8 @@ public class Bot implements Player {
 
 	@Override
 	public void sendOpponentsMove(Move move) {
+		if(territoriesMode)
+			return;
 		if (move.getX() != -1) { // if pass then doesn't matter
 			this.opponentsMove = move;
 			gameBoard[move.getX()][move.getY()] = move.getColor();
@@ -91,6 +98,8 @@ public class Bot implements Player {
 
 	@Override
 	public void sendBoard(String boardRaw, int boardSize) {
+		if(territoriesMode)
+			return;
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				char curField = boardRaw.charAt(i * boardSize + j);
@@ -113,6 +122,8 @@ public class Bot implements Player {
 
 	@Override
 	public void sendCancellingMove(Move move) {
+		if(territoriesMode)
+			return;
 		rejectedMove=move;
 		gameBoard[move.getX()][move.getY()]=move.getColor();
 	}

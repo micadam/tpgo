@@ -31,7 +31,10 @@ public class GamePanel extends JPanel {
 		repaint();
 	}
 	public void setBoard(int[][] board){
-		this.board=board;
+		if(territoriesMode){
+			territories=board;
+		}else
+			this.board=board;
 		repaint();
 	}
 	
