@@ -73,13 +73,13 @@ public class GamePanel extends JPanel {
 				for(int y=0; y<boardSize; y++){
 					if(territories[x][y]!=0){
 						if(territories[x][y] >0 )
-							g.setColor(Color.GREEN);
+							g.setColor(Color.WHITE);
 						else if(territories[x][y] < 0) {						
-							g.setColor(Color.RED);
+							g.setColor(Color.BLACK);
 						} else {
 							throw new IllegalArgumentException();
 						}
-						g.drawRect(fieldSize + x * fieldSize - pawnSize/2, fieldSize + y * fieldSize - pawnSize/2, pawnSize, pawnSize);
+						g.fillRect(fieldSize + x * fieldSize - pawnSize/4, fieldSize + y * fieldSize - pawnSize/4, pawnSize/2, pawnSize/2);
 					}
 				}
 			}

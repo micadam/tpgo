@@ -68,7 +68,7 @@ public class CaptureRule implements GameRule {
 					breathsOfGroup.set(0, breathsOfGroup.get(0) + 1);
 					continue;
 				}
-				int breaths=Algorithm.getBreathsOfThisGroup(newX,newY,visited,groupOf,gameBoard,workingGroup,workingColor,0);
+				int breaths=PawnGroupAlgorithm.getBreathsOfThisGroup(newX,newY,visited,groupOf,gameBoard,workingGroup,workingColor,0);
 				breathsOfGroup.set(workingGroup, breaths);
 				/*
 				xQueue.push(newX);

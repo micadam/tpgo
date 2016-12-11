@@ -37,7 +37,7 @@ public class AuthWindow extends JDialog {
 	
 	private void prepareUI(GoGameManagerConnected goGameManagerConnected) {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{17, 17, 7, 28, 3, 0, 0};
+		gridBagLayout.columnWidths = new int[]{17, 17, 7, 28, 54, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 18, 21, 28, 26, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
@@ -98,13 +98,6 @@ public class AuthWindow extends JDialog {
 		gbc_keyCodeField.gridx = 3;
 		gbc_keyCodeField.gridy = 3;
 		getContentPane().add(keyCodeField, gbc_keyCodeField);
-		messageLabel=new JLabel();
-		GridBagConstraints gbc_messageLabel = new GridBagConstraints();
-		gbc_messageLabel.anchor = GridBagConstraints.WEST;
-		gbc_messageLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_messageLabel.gridx = 4;
-		gbc_messageLabel.gridy = 3;
-		getContentPane().add(messageLabel, gbc_messageLabel);
 		joinGame = new JButton("Join game");
 		joinGame.addActionListener(new AuthWindowListener(goGameManagerConnected,this));
 		GridBagConstraints gbc_joinGame = new GridBagConstraints();
@@ -116,6 +109,14 @@ public class AuthWindow extends JDialog {
 		
 		hostGame = 	new JButton("Create game");
 		hostGame.addActionListener(new AuthWindowListener(goGameManagerConnected,this));
+		messageLabel=new JLabel();
+		GridBagConstraints gbc_messageLabel = new GridBagConstraints();
+		gbc_messageLabel.gridwidth = 3;
+		gbc_messageLabel.anchor = GridBagConstraints.WEST;
+		gbc_messageLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_messageLabel.gridx = 2;
+		gbc_messageLabel.gridy = 4;
+		getContentPane().add(messageLabel, gbc_messageLabel);
 		
 		separator = new JSeparator();
 		GridBagConstraints gbc_separator = new GridBagConstraints();

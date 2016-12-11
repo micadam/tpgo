@@ -199,7 +199,7 @@ public class GameInstance implements Runnable {
 				if(lastMove!=null){
 					currentPlayer.sendResponse("OK");
 					boolean[][] visited = new boolean[boardSize][boardSize];
-					Algorithm.getBreathsOfThisGroup(lastMove.getX(),lastMove.getY(),visited,board,gameBoard,0,0,1);
+					PawnGroupAlgorithm.getBreathsOfThisGroup(lastMove.getX(),lastMove.getY(),visited,board,gameBoard,0,0,1);
 					currentPlayer.sendResponse("SYNC");
 					notCurrentPlayer.sendResponse("SYNC");
 					sendBoardToPlayers(board);
@@ -212,7 +212,7 @@ public class GameInstance implements Runnable {
 				currentPlayer.sendResponse("OK");
 				lastMove=new Move(x,y,currentColor);
 				boolean[][] visited = new boolean[boardSize][boardSize];
-				Algorithm.getBreathsOfThisGroup(x,y,visited,board,gameBoard,currentColor,0,1);
+				PawnGroupAlgorithm.getBreathsOfThisGroup(x,y,visited,board,gameBoard,currentColor,0,1);
 				currentPlayer.sendResponse("SYNC");
 				notCurrentPlayer.sendResponse("SYNC");
 				sendBoardToPlayers(board);

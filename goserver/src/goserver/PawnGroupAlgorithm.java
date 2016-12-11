@@ -2,7 +2,7 @@ package goserver;
 
 import java.util.LinkedList;
 
-public class Algorithm {
+public class PawnGroupAlgorithm {
 	private static int[][] directions={{0,1},{0,-1},{1,0},{-1,0}};
 	private static boolean fieldInBounds(int x,int y,int boardSize){
 		return (x>=0 && y>=0 && x<boardSize && y<boardSize);
