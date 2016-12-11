@@ -62,8 +62,8 @@ public class GameInstance implements Runnable {
 			while(x==-100 && timeout>0){
 				try {
 					Thread.sleep(100);
-					move=currentPlayer.getMove();
-					x=move.getX();
+					move = currentPlayer.getMove();
+					x = move.getX();
 					timeout--;
 				} catch (InterruptedException e) {
 					System.out.println("[Game Instance] timeout interrupt( InterruptedException)");
@@ -139,7 +139,7 @@ public class GameInstance implements Runnable {
 				}
 				
 			}
-			if(x!=-1){
+			if(x != -1){
 				passFlag=false;
 			}
 			

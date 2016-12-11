@@ -131,28 +131,34 @@ public class CaptureRule implements GameRule {
 		int boardChanged = 0;
 		captured=0;
 		//check the board for groups with no breaths;
-		System.out.println(breathsOfGroup);
+		System.out.println("[SERVR] Checking for groups with no breaths");
 		for(int i = 0; i < boardSize; i++) {
 			for(int j = 0; j < boardSize; j++) {
-				if(groupOf[i][j] != -1 && breathsOfGroup.get(groupOf[i][j]) == 0) {
+				if(groupOf[i][j] != -1  && breathsOfGroup.get(groupOf[i][j]) == 0) {
 					System.out.println("[SERVER]Removing piece group " + groupOf[i][j]);
-					if(gameBoard[i][j]==1)
+					if(gameBoard[i][j] == Move.WHITE_NUMBER){						
 						whitePrisoners++;
-					else
+					}
+					else if (gameBoard[i][j] == Move.BLACK_NUMBER){						
 						blackPrisoners++;
+					} else {
+						System.out.println("[SERVER] Unexpected board piece in CaptureRule");
+					}
 					captured++;
 					gameBoard[i][j] = 0;
-					if(groupOf[i][j]!=0)
+					if(groupOf[i][j] != 0)
 						forbiddenByKo=new Move(i,j,0);			//remember captured territory 
 															//so it can't be reused for capture in the next move
 				}
 			}
 		}
-		if(captured==1 || ( captured==2 && breathsOfGroup.get(0)==0))
+		if(captured==1 || ( captured==2 && breathsOfGroup.get(0)==0)) {			
 			System.out.println("Ko rule active");
-		else
+		} else {			
 			dismissKo();
-		boardChanged=captured>0?1:0;
+		}
+		
+		boardChanged = (captured > 0 ? 1 : 0) ;
 		return boardChanged;
 	}
 }
