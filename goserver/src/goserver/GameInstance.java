@@ -160,6 +160,17 @@ public class GameInstance implements Runnable {
 		int[][] board=new int[boardSize][boardSize];
 		boolean done=false;
 		boolean passFlag=false;
+		boolean[][] visitedTemp = new boolean[boardSize][boardSize];
+		for(int x =0; x < boardSize; x ++ ){
+			for( int y =0 ; y < boardSize ; y ++ ) {
+				if(!visitedTemp[x][y]){
+					PawnGroupAlgorithm.fillThisGroup(x, y, visitedTemp, board, gameBoard);
+				}
+			}
+		}
+		whitePlayer.sendResponse("SYNC");
+		blackPlayer.sendResponse("SYNC");
+		sendBoardToPlayers(board);
 		Move lastMove=null;
 		while(!done){
 			Player currentPlayer = (currentColor == Move.BLACK_NUMBER ? blackPlayer : whitePlayer);

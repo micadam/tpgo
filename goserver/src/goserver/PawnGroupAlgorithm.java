@@ -1,5 +1,6 @@
 package goserver;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class PawnGroupAlgorithm {
@@ -47,5 +48,63 @@ public class PawnGroupAlgorithm {
 			}
 		}
 		return breaths;
+	}
+
+	public static void fillThisGroup(int x,int y,boolean[][] visited1, int[][] groupOf, int[][] gameBoard){
+		if(gameBoard[x][y]!=0 )
+			return;
+		System.out.println("X Y " + x + " " + y);
+		int boardSize=gameBoard.length;
+		boolean visited[][] = new boolean[boardSize][boardSize];
+		ArrayList<Integer> xQueue= new ArrayList<Integer>();
+		ArrayList<Integer> yQueue= new ArrayList<Integer>();
+		xQueue.add(x);
+		yQueue.add(y);
+		int newX, newY;
+		int black=0,white=0;
+		int index =0;
+		while(index < xQueue.size()) {								//keep adding pieces until we visited the whole group
+			int curX = xQueue.get(index);											//take a queued piece
+			int curY = yQueue.get(index);
+			
+			for(int dir2[] : directions) {											//try to queue each of its neighbors
+				newX = curX + dir2[0];
+				newY = curY + dir2[1];
+				if(fieldInBounds(newX, newY, boardSize) && visited[newX][newY] == false) {
+					visited[newX][newY]=true;
+					visited1[newX][newY]=true;
+					if(gameBoard[newX][newY] == Move.WHITE_NUMBER){		
+						
+						white++;
+						System.out.println("Białe : " + white);
+					} else if( gameBoard[newX][newY]== Move.BLACK_NUMBER){
+						black++;
+						System.out.println("Czorne XD  : " +  black);
+					}
+					else {	//it's an empty  place, queue it
+						xQueue.add(newX);
+						yQueue.add(newY);
+					} 
+				}
+			}
+			index++;
+		}
+		int workingGroup=0;
+		if(black == 0 ){
+			workingGroup=Move.WHITE_NUMBER;
+		}else if( white == 0 ) {
+			workingGroup = Move.BLACK_NUMBER;
+		}
+		System.out.println("WORKING GRoup " + workingGroup);
+		if(workingGroup!= 0 ){
+			index--;
+			while(index>=0){
+				groupOf[xQueue.get(index)][yQueue.get(index)]= workingGroup;
+				System.out.println("pop");
+				index--;
+			}
+		}
+		yQueue.clear();
+		xQueue.clear();
 	}
 }
