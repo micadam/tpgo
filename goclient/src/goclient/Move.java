@@ -22,7 +22,7 @@ public class Move {
 	public int getColor() {
 		return color;
 	}
-	public void setColor() {
+	public void setColor(int color) {
 		this.color = color;
 	}
 	

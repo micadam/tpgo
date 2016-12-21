@@ -36,7 +36,7 @@ public class GoGameManagerRaw implements GoGameManager {
 			for(int y=0;y<BOARD_SIZE ;y++){
 				if(gameBoard[x][y]==0){ 
 					move=new Move(x,y, currentColor);
-					makeMove(x, y);
+					makeMove(move);
 					break;
 				}
 			}
@@ -56,7 +56,9 @@ public class GoGameManagerRaw implements GoGameManager {
 		return "Make your move: " + color;
 		
 	}
-	public int makeMove(int x, int y){
+	public int makeMove(Move move){
+		int x = move.getX();
+		int y = move.getY();
 		if( x != -1 ){	  //check if player passed
 			if(x < 0 || y < 0 || x >= BOARD_SIZE ||  y >= BOARD_SIZE || gameBoard[x][y] != 0) { //invalid move
 				return -1;

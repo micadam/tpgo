@@ -31,7 +31,8 @@ public class ConnectedPlayer implements Player {
 			if(moveTokens[0].equals("MOVE")) {
 				int x = Integer.parseInt(moveTokens[1]);
 				int y = Integer.parseInt(moveTokens[2]);
-				return new Move(x, y, 0);
+				int color = Integer.parseInt(moveTokens[3]);
+				return new Move(x, y, color);
 			} else if(moveTokens[0].equals("PASS")) {
 				return new Move(-1, -1, 0);
 			} else {

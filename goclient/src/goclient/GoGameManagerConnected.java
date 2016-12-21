@@ -75,13 +75,13 @@ public class GoGameManagerConnected implements GoGameManager {
 	}
 	
 	@Override
-	public int makeMove(int x, int y) {
+	public int makeMove(Move move) {
 		try{ 			
-			if(x == -1) {
+			if(move.getX() == -1) {
 				out.println("PASS");
 			}
 			else {
-				out.println("MOVE " + x + " " + y);
+				out.println("MOVE " + move.getX() + " " + move.getY() +" "+ move.getColor());
 			}
 			
 			String response = in.readLine();

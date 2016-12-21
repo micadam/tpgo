@@ -2,7 +2,7 @@ package goclient;
 
 public interface GoGameManager {
 	
-	public int makeMove(int x, int y);
+	public int makeMove(Move move);
 	public int[][] getBoard();
 	public int getBoardSize();
 	public Move getResponse();

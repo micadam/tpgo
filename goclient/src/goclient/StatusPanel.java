@@ -24,6 +24,11 @@ public class StatusPanel extends JPanel {
 
 	public void setTerritoriesmode(boolean mode){
 		this.territoriesMode=mode;
+		if(mode){
+			surrenderButton.setText("Resume");
+		}else{
+			surrenderButton.setText("Surrender");
+		}
 	}
 	public void waitForMove(Move move) {
 		passListener.setMove(move);

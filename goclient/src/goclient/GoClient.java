@@ -23,7 +23,7 @@ public class GoClient {
 			//System.out.println("GameStatus from GameManager: " + gameStatus);
 			if(gameStatus == Move.BLACK_NUMBER || gameStatus == Move.WHITE_NUMBER) { 	//make a move
 				move=goGameWindow.getUserMove(gameStatus);
-				answer=goGameManager.makeMove(move.getX(),move.getY());
+				answer=goGameManager.makeMove(move);
 				System.out.println("answer from gameManager: "+ answer);
 				goGameWindow.setStatusMessage(goGameManager.getStatusMessage());
 			} else if (gameStatus == 2) { //OPPONENT

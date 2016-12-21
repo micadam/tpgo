@@ -225,7 +225,9 @@ public class GameInstance implements Runnable {
 				currentPlayer.sendResponse("OK");
 				lastMove=new Move(x,y,currentColor);
 				boolean[][] visited = new boolean[boardSize][boardSize];
-				PawnGroupAlgorithm.getBreathsOfThisGroup(x,y,visited,board,gameBoard,currentColor,0,1);
+				int tempColor = move.getColor() == 2 ? 0 : currentColor;
+				System.out.println("Temp color is " + tempColor);
+				PawnGroupAlgorithm.getBreathsOfThisGroup(x,y,visited,board,gameBoard,tempColor,0,1);
 				currentPlayer.sendResponse("SYNC");
 				notCurrentPlayer.sendResponse("SYNC");
 				sendBoardToPlayers(board);

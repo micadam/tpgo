@@ -37,7 +37,9 @@ public class GamePanel extends JPanel {
 			this.board=board;
 		repaint();
 	}
-	
+	public boolean getTerritoriesMode(){
+		return territoriesMode;
+	}
 	@Override
 	public void paintComponent(Graphics g){
 		g.setColor(boardColor);			
@@ -138,7 +140,7 @@ class MoveListener extends MouseAdapter {
 	
 	@Override
 	public void mouseClicked(MouseEvent me) {
-		if( SwingUtilities.isLeftMouseButton(me) ) {		
+		if( SwingUtilities.isLeftMouseButton(me) || (gamePanel.getTerritoriesMode() && SwingUtilities.isRightMouseButton(me))) {		
 			int x = me.getX();
 			int y = me.getY();
 			
@@ -164,6 +166,8 @@ class MoveListener extends MouseAdapter {
 					closestY = closestY / fieldSize - 1;
 					move.setX(closestX);
 					move.setY(closestY);
+					if(SwingUtilities.isRightMouseButton(me))
+						move.setColor(2);
 					gamePanel.makeMove(move);
 					System.out.println("Placing piece on coordinates: " + closestX + ", " + closestY);
 				}
