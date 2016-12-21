@@ -109,6 +109,7 @@ public class GameInstance implements Runnable {
 				
 			} else if (gameBoard[x][y] != 0){
 				currentPlayer.sendResponse("NO");
+				System.out.println("This field is not empty");
 				currentPlayer.sendCancellingMove(new Move(x,y,gameBoard[x][y]));
 				currentColor *= -1;			
 			} else {
@@ -121,6 +122,7 @@ public class GameInstance implements Runnable {
 					}
 					boardChanged = boardChanged + result;
 				}
+				System.out.println("Board changed has value: " + boardChanged);
 				if(boardChanged > 0) {
 					gameBoard[x][y] = currentColor;
 					currentPlayer.sendResponse("OK");

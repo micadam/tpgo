@@ -66,10 +66,11 @@ public class CaptureRule implements GameRule {
 					workingColor = -1 * color;
 				} else if (gameBoard[newX][newY] == 0) {						//the active player's group has one more breath thanks to this free intersection
 					breathsOfGroup.set(0, breathsOfGroup.get(0) + 1);
+					System.out.println("Adding breaths to group 0 " + breathsOfGroup.get(0));
 					continue;
 				}
 				int breaths=PawnGroupAlgorithm.getBreathsOfThisGroup(newX,newY,visited,groupOf,gameBoard,workingGroup,workingColor,0);
-				breathsOfGroup.set(workingGroup, breaths);
+				breathsOfGroup.set(workingGroup, breathsOfGroup.get(workingGroup)+breaths);
 				/*
 				xQueue.push(newX);
 				yQueue.push(newY);
@@ -108,6 +109,7 @@ public class CaptureRule implements GameRule {
 		}
 		
 		if(captured==0 && breathsOfGroup.get(0) == 0) {
+			System.out.println("Suicide rule");
 			return -1;
 		}
 		if(koRule(x,y,captured)){
