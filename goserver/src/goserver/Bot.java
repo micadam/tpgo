@@ -134,4 +134,9 @@ public class Bot implements Player {
 		
 	}
 
+	@Override
+	public boolean isActive() {
+		return true;
+	}
+
 }

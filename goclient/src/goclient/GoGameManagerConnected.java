@@ -56,7 +56,9 @@ public class GoGameManagerConnected implements GoGameManager {
 					}else{
 						return 7;
 					}
-				}else {
+				} else if(statusTokens[0].equals("PING")){			//using the loop we are in
+					out.println("PONG");	
+				} else {
 					System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
 					return -100;
 				}

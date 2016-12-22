@@ -85,6 +85,18 @@ public class ConnectedPlayer implements Player {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public boolean isActive() {
+		out.println("PING");
+		try {
+			in.readLine();
+		} catch (IOException e) {
+			System.out.println("Player is not active anymore");
+			return false;
+		}
+		return true;
+	}
 	
 
 }

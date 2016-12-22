@@ -52,6 +52,7 @@ public class GoServer {
 								gi.addPlayer(new Bot(Integer.parseInt(messageTokens[2])));
 							}
 						games.add(gi);
+						gi.start();
 					}	
 				} else if (messageTokens[0].equals("JOIN")) {	//JOIN <keycode, only if a game with such keycode exists
 					boolean added = false;

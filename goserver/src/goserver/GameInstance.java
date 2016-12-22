@@ -3,9 +3,8 @@ package goserver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameInstance implements Runnable {
+public class GameInstance extends Thread {
 	
-	Thread thread;
 	private final int boardSize ;
 	//private int[][] gameBoard;
 	private List<GameRule> rules;
@@ -15,12 +14,7 @@ public class GameInstance implements Runnable {
 	Player whitePlayer;
 	Player blackPlayer;
 	
-	private int currentState;
 	private String keyCode;
-	
-	public int getState() {
-		return currentState;
-	}
 	
 	public int getBoardSize() {
 		return boardSize;
@@ -32,8 +26,6 @@ public class GameInstance implements Runnable {
 	public boolean addPlayer(Player player) {
 		if(whitePlayer == null) {			
 			whitePlayer = player;
-			thread = new Thread(this);
-			thread.start();
 			return true;
 		} else {
 			return false;
@@ -50,6 +42,16 @@ public class GameInstance implements Runnable {
 		Player winner=whitePlayer;
 		boolean passFlag=false;
 		boolean gameOver = false;
+		
+		while(whitePlayer == null && !gameOver){		//waiting for player two
+			gameOver = ! blackPlayer.isActive();
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		while(gameOver == false) {
 			Player currentPlayer = (currentColor == Move.BLACK_NUMBER ? blackPlayer : whitePlayer);
 			Player notCurrentPlayer = (currentColor == Move.BLACK_NUMBER ? whitePlayer : blackPlayer);
@@ -147,10 +149,15 @@ public class GameInstance implements Runnable {
 			
 			currentColor *= -1;
 		}
-		winner.sendResponse("END WIN");
-		loser.sendResponse("END LOSE");	
-		winner.endCommunication();
-		loser.endCommunication();
+		if(winner!= null){
+			winner.sendResponse("END WIN");
+			winner.endCommunication();
+		}
+		if(loser != null){
+			loser.sendResponse("END LOSE");	
+			loser.endCommunication();
+		}
+		System.out.println("Game ended");
 		goServer.remove(this);
 	}
 	private void matchTerritories(int[] args,int[][] gameBoard){

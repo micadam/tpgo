@@ -10,4 +10,5 @@ public interface Player {
 	public void sendBoard(String boardRaw, int boardSize);
 	public void sendCancellingMove(Move move);
 	public void endCommunication();
+	public boolean isActive();
 }
