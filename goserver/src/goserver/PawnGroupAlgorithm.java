@@ -90,9 +90,9 @@ public class PawnGroupAlgorithm {
 			index++;
 		}
 		int workingGroup=0;
-		if(black == 0 ){
+		if(black == 0 && white !=0){
 			workingGroup=Move.WHITE_NUMBER;
-		}else if( white == 0 ) {
+		}else if( white == 0 && black != 0) {
 			workingGroup = Move.BLACK_NUMBER;
 		}
 		System.out.println("WORKING GRoup " + workingGroup);
