@@ -27,6 +27,15 @@ public class CaptureRule implements GameRule {
 		return blackPrisoners-whitePrisoners;
 	}
 	
+	public int getWhitePrisoners() {
+		return whitePrisoners;
+	}
+	
+	public int getBlackPrisoners() {
+		return blackPrisoners;
+	}
+	
+	
 	@Override
 	public int verifyMove(int x, int y, int[][] gameBoard, int color) {
 		int boardSize = gameBoard[0].length;

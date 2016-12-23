@@ -45,6 +45,12 @@ public class GoGameWindow extends JFrame {
 		gamePanel.makeMove(move);
 	}
 	
+	public void setWhitePrisoners(int prisoners) {
+		statusPanel.setWhitePrisoners(prisoners);
+	}
+	public void setBlackPrisoners(int prisoners) {		
+		statusPanel.setBlackPrisoners(prisoners);
+	}
 	
 	private void initUI(){
 		setLayout(new BorderLayout());

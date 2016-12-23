@@ -40,6 +40,9 @@ public class GoClient {
 				goGameWindow.setTerritoriesMode(true);
 			}else if (gameStatus == 7 ) { //TERRITORIES END
 				goGameWindow.setTerritoriesMode(false);
+			} else if(gameStatus == 8) {  //PRISONERS
+				goGameWindow.setWhitePrisoners(goGameManager.getWhitePrisoners());
+				goGameWindow.setBlackPrisoners(goGameManager.getBlackPrisoners());
 			}else if(gameStatus == -100){
 				System.out.println("Unknown status: " + gameStatus);
 				throw new IllegalArgumentException();

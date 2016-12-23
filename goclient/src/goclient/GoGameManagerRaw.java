@@ -91,6 +91,20 @@ public class GoGameManagerRaw implements GoGameManager {
 	public int getBoardSize() {
 		return BOARD_SIZE;
 	}
+
+
+	@Override
+	public int getWhitePrisoners() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public int getBlackPrisoners() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
 
 

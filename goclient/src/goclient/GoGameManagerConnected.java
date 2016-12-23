@@ -15,6 +15,8 @@ public class GoGameManagerConnected implements GoGameManager {
 	private boolean connectionEstabilished=false;
 	private int boardSize;
 	private String currentStatusMessage = "DUMMYTEXT";
+	int whitePrisoners = 0;
+	int blackPrisoners = 1;
 	
 	@Override
 	public int getGameStatus() {
@@ -58,6 +60,10 @@ public class GoGameManagerConnected implements GoGameManager {
 					}
 				} else if(statusTokens[0].equals("PING")){			//using the loop we are in
 					out.println("PONG");	
+				} else if (statusTokens[0].equals("PRISONERS")) {
+					whitePrisoners = Integer.parseInt(statusTokens[1]);
+					blackPrisoners = Integer.parseInt(statusTokens[2]);
+					return 8;
 				} else {
 					System.out.println("[CLIENT] Unknown response in getGameStatus(): " + status);
 					return -100;
@@ -149,6 +155,14 @@ public class GoGameManagerConnected implements GoGameManager {
 	@Override 
 	public Move getCancellingMove(){
 		return cancellingMove;
+	}
+	
+	public int getWhitePrisoners() {
+		return whitePrisoners;
+	}
+	
+	public int getBlackPrisoners() {
+		return blackPrisoners;
 	}
 	
 	public GoGameManagerConnected() throws IllegalStateException {

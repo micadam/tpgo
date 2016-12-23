@@ -7,6 +7,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JSeparator;
+import java.awt.Font;
 
 public class StatusPanel extends JPanel {
 	
@@ -17,10 +22,13 @@ public class StatusPanel extends JPanel {
 	ButtonListener disagreeListener;
 	JButton disagreeButton;
 	
+	JLabel whitePrisonersLabel;
+	JLabel blackPrisonersLabel;
+	
 	JLabel statusLabel;
 	
-	JLabel gameTime;
 	private boolean territoriesMode=false;
+	private JSeparator separator;
 
 	public void setTerritoriesmode(boolean mode){
 		this.territoriesMode=mode;
@@ -58,24 +66,82 @@ public class StatusPanel extends JPanel {
 		statusLabel.setText(status);
 	}
 	
+	public void setWhitePrisoners(int prisoners) {
+		whitePrisonersLabel.setText("White prisoners: " + prisoners);
+	}
+	public void setBlackPrisoners(int prisoners) {
+		blackPrisonersLabel.setText("Black prisoners: " + prisoners);
+	}
+	
 	private void initUI() {
-		
-		this.setLayout(new FlowLayout());
-		gameTime = new JLabel("DUMMYTEXT");
-		this.add(gameTime);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{113, 96, 42, 55, 0, 57, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{28, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE, 4.9E-324, 4.9E-324};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
 		
 		statusLabel = new JLabel("Waiting for second player");
-		this.add(statusLabel);
+		statusLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+		GridBagConstraints gbc_statusLabel = new GridBagConstraints();
+		gbc_statusLabel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_statusLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_statusLabel.anchor = GridBagConstraints.NORTH;
+		gbc_statusLabel.gridx = 1;
+		gbc_statusLabel.gridy = 0;
+		this.add(statusLabel, gbc_statusLabel);
+		blackPrisonersLabel = new JLabel("Black Prisoners: 0");
+		GridBagConstraints gbc_blackPrisonersLabel = new GridBagConstraints();
+		gbc_blackPrisonersLabel.anchor = GridBagConstraints.WEST;
+		gbc_blackPrisonersLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_blackPrisonersLabel.gridx = 8;
+		gbc_blackPrisonersLabel.gridy = 0;
+		this.add(blackPrisonersLabel, gbc_blackPrisonersLabel);
+		
 		
 		passButton = new JButton("Pass");
-		this.add(passButton);
+		GridBagConstraints gbc_passButton = new GridBagConstraints();
+		gbc_passButton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_passButton.anchor = GridBagConstraints.NORTH;
+		gbc_passButton.insets = new Insets(0, 0, 5, 5);
+		gbc_passButton.gridx = 4;
+		gbc_passButton.gridy = 1;
+		this.add(passButton, gbc_passButton);
 		passButton.setEnabled(false);
-		disagreeButton = new JButton("Disagree");
-		this.add(disagreeButton);
-		disagreeButton.setEnabled(false);
 		surrenderButton = new JButton("Surrender");
-		this.add(surrenderButton);
+		GridBagConstraints gbc_surrenderButton = new GridBagConstraints();
+		gbc_surrenderButton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_surrenderButton.anchor = GridBagConstraints.NORTH;
+		gbc_surrenderButton.insets = new Insets(0, 0, 5, 5);
+		gbc_surrenderButton.gridx = 5;
+		gbc_surrenderButton.gridy = 1;
+		this.add(surrenderButton, gbc_surrenderButton);
 		surrenderButton.setEnabled(false);
+		disagreeButton = new JButton("Disagree");
+		GridBagConstraints gbc_disagreeButton = new GridBagConstraints();
+		gbc_disagreeButton.insets = new Insets(0, 0, 5, 5);
+		gbc_disagreeButton.anchor = GridBagConstraints.NORTHWEST;
+		gbc_disagreeButton.gridx = 6;
+		gbc_disagreeButton.gridy = 1;
+		this.add(disagreeButton, gbc_disagreeButton);
+		disagreeButton.setEnabled(false);
+		
+		
+		whitePrisonersLabel = new JLabel("White prisoners: 0");
+		GridBagConstraints gbc_whitePrisonersLabel = new GridBagConstraints();
+		gbc_whitePrisonersLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_whitePrisonersLabel.anchor = GridBagConstraints.WEST;
+		gbc_whitePrisonersLabel.gridwidth = 2;
+		gbc_whitePrisonersLabel.gridx = 8;
+		gbc_whitePrisonersLabel.gridy = 1;
+		this.add(whitePrisonersLabel, gbc_whitePrisonersLabel);
+		
+		separator = new JSeparator();
+		GridBagConstraints gbc_separator = new GridBagConstraints();
+		gbc_separator.gridwidth = 11;
+		gbc_separator.gridx = 0;
+		gbc_separator.gridy = 2;
+		add(separator, gbc_separator);
 		
 //		this.setPreferredSize(new Dimension(600, 30));
 		this.setVisible(true);

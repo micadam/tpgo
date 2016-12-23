@@ -56,6 +56,10 @@ public class GameInstance extends Thread {
 			Player currentPlayer = (currentColor == Move.BLACK_NUMBER ? blackPlayer : whitePlayer);
 			Player notCurrentPlayer = (currentColor == Move.BLACK_NUMBER ? whitePlayer : blackPlayer);
 			
+			String prisonerMessage = "PRISONERS " + captureRule.whitePrisoners + " " + captureRule.blackPrisoners;
+			currentPlayer.sendResponse(prisonerMessage);
+			notCurrentPlayer.sendResponse(prisonerMessage);
+			
 			currentPlayer.sendAlert(currentColor);
 			Move move = currentPlayer.getMove();
 			int x = move.getX();

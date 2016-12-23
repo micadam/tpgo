@@ -9,4 +9,6 @@ public interface GoGameManager {
 	public int getGameStatus();
 	public String getStatusMessage();
 	public Move getCancellingMove();
+	public int getWhitePrisoners();
+	public int getBlackPrisoners();
 }
