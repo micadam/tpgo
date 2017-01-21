@@ -54,7 +54,7 @@ public class Table extends UntypedActor {
             		blackPlayer = player;
             		whitePlayer.tell(text, getSelf());
             		blackPlayer.tell(text, getSelf());
-            		Move move = new Move(-1,-1,-1);
+            		Move move = new Move();
             		whitePlayer.tell(move, getSelf());			//starts the game 
             	}  
             	
@@ -64,8 +64,6 @@ public class Table extends UntypedActor {
 			//check, send response
 		} else if(message instanceof Territories){
 			//change mode
-		} else if(message instanceof Surrender){
-			
-		}
+		} 
 	}
 }

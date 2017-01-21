@@ -8,16 +8,15 @@ public class Human extends UntypedActor{
 	@Override
 	public void onReceive(Object message) throws Exception {
 		if( message instanceof Move ){
-			Move m = (Move ) message;
-			if(m.getX() != -1){
-				setField(m.getX(),m.getY(),m.getCOlor());
-			}
 			//wait for move
-			Move response;
+			Move response = new Move();
 			getSender().tell(response, getSelf());
-		} /*else if(message instanceof Opponent) {
-			//connect it to Move
-		} */else if(message instanceof Sync ){
+		} else if(message instanceof Opponent) {
+			Opponent o = (Opponent ) message;
+			if(o.getX() != -1){ 	//pass handling
+				setField(o.getX(),o.getY(),o.getColor());
+			}
+		} else if(message instanceof Sync ){
 			Sync s = (Sync ) message;
 			setBoard(s.getBoard());
 		} else if( message instanceof ReDo){
@@ -39,7 +38,19 @@ public class Human extends UntypedActor{
 		}
 		
 	}
+	public void setField(int x, int y, int color){
+		
+	}
+	public void setBoard(int[][] board){
+		//
+	}
 	public Human(){
+		
+	}
+	public void setBlackPrisoners(int prisoners){
+		
+	}
+	public void setWhitePrisoners(int prisoners){
 		
 	}
 }
