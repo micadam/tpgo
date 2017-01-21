@@ -1,7 +1,8 @@
 @(message: String)
 
 @main("Welcome to Play") {
-
-    @play20.welcome(message, style = "Java")
-
+        
+        <form action="@routes.Application.joinTable()" class="pull-right">
+        <input id="tableName" name="tableName" class="input-small" type="text" placeholder="table name">
+        <button class="btn" type="submit">Sign in</button>
 }
