@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
-import models.msgs.Join;
+import models.msgs.*;
 import play.libs.Akka;
 import play.mvc.WebSocket;
 import scala.concurrent.Await;
@@ -48,14 +48,22 @@ public class Table extends UntypedActor {
             	String text =  "New player entered the game"; 
             	if(whitePlayer == null){
             		whitePlayer = player;
+            		whitePlayer.tell(text, getSelf());
             	}
             	else{
             		blackPlayer = player;
+            		whitePlayer.tell(text, getSelf());
             		blackPlayer.tell(text, getSelf());
+            		Move move = new Move();
+            		whitePlayer.tell(move, getSelf());			//starts the game 
             	}  
-            	whitePlayer.tell(text, getSelf());
+            	
                 getSender().tell("OK", getSelf());
 			}
-		}
+		} else if(message instanceof Move){
+			//check, send response
+		} else if(message instanceof Territories){
+			//change mode
+		} 
 	}
 }
