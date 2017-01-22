@@ -18,7 +18,7 @@ public class Application extends Controller {
     	
     	System.out.println(tableName);
 
-    	return ok(views.html.gameBoard.render("testt"));
+    	return ok(views.html.gameBoard.render(tableName));
     	
     }
     
@@ -36,12 +36,8 @@ public class Application extends Controller {
         };
     }
     
-    public static Result gameBoard() {
-    	return ok(views.html.gameBoard.render("test"));
-    }
-    
-    public static Result gameBoardJs (String userName) {
-    	return ok(views.js.gameBoard.render("test3"));
+    public static Result gameBoardJs (String tableName) {
+    	return ok(views.js.gameBoard.render(tableName));
     }
 
 }

@@ -24,6 +24,8 @@ public class Table extends UntypedActor {
     private ActorRef whitePlayer;
     private ActorRef blackPlayer;
     
+    private ActorRef currentPlayer;
+    
     public static void join(final String name, WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out ) throws Exception{
         // Send the Join message to the table
     	ActorRef table = tables.get(name);
@@ -54,14 +56,27 @@ public class Table extends UntypedActor {
             		blackPlayer = player;
             		whitePlayer.tell(text, getSelf());
             		blackPlayer.tell(text, getSelf());
-            		Move move = new Move();
-            		whitePlayer.tell(move, getSelf());			//starts the game 
+            		Go go = new Go();
+            		blackPlayer.tell(go, getSelf());			//starts the game 
             	}  
             	
                 getSender().tell("OK", getSelf());
 			}
 		} else if(message instanceof Move){
-			//check, send response
+			if(getSender() == currentPlayer) {
+				System.out.println("Got the message from the right player");
+				//TODO move checks
+				
+				whitePlayer.tell(message, getSelf());
+				//TODO this should be earlier, using for testing
+				if(blackPlayer != null) {					
+					blackPlayer.tell(message, getSelf());
+				}
+			} else {
+				System.out.println("Got a message from the wrong player");
+			}
+			currentPlayer = (currentPlayer == whitePlayer ? blackPlayer : whitePlayer);
+
 		} else if(message instanceof Territories){
 			//change mode
 		} 

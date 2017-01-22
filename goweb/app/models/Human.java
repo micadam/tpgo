@@ -1,16 +1,47 @@
 package models;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
-import models.msgs.*;
+import models.msgs.End;
+import models.msgs.Move;
+import models.msgs.Opponent;
+import models.msgs.Prisoners;
+import models.msgs.ReDo;
+import models.msgs.Sync;
+import models.msgs.Territories;
+import play.Logger;
+import play.libs.F.Callback;
+import play.libs.Json;
+import play.mvc.WebSocket;
 
 public class Human extends UntypedActor{
+    public final ActorRef             table;
+    
+    //TODO TODO
+    private final int myColor = 1;
 
+    protected WebSocket.In<JsonNode>  in;
+    protected WebSocket.Out<JsonNode> out;
+    
+    
 	@Override
 	public void onReceive(Object message) throws Exception {
+		System.out.println("[ACTOR]: received message: " + message.toString());
 		if( message instanceof Move ){
 			//wait for move
-			Move response = new Move();
-			getSender().tell(response, getSelf());
+			if(getSender() != table) {				
+				table.tell(message, getSelf());
+			} else {
+				Move m = (Move)message;
+				ObjectNode obj = Json.newObject();
+				obj.put("x", m.x);
+				obj.put("y", m.y);
+				obj.put("color", m.color);
+				out.write(obj);
+			}
 		} else if(message instanceof Opponent) {
 			Opponent o = (Opponent ) message;
 			if(o.getX() != -1){ 	//pass handling
@@ -44,7 +75,35 @@ public class Human extends UntypedActor{
 	public void setBoard(int[][] board){
 		//
 	}
-	public Human(){
+	public Human(WebSocket.In<JsonNode> _in,
+            WebSocket.Out<JsonNode> _out, ActorRef _table){
+		
+		table = _table;
+		in = _in;
+		out = _out;
+		
+        in.onMessage(new Callback<JsonNode>()
+        {
+            @Override
+            public void invoke(JsonNode event)
+            {
+                try
+                {
+                	System.out.println(event.toString());
+                	int x = event.get("x").asInt();
+                	int y = event.get("y").asInt();
+                	getSelf().tell(new Move(x, y, myColor), getSelf());                	
+                	System.out.println(event.toString());
+                }
+                catch (Exception e)
+                {
+                	e.printStackTrace();
+                    Logger.error("invokeError");
+                }
+                
+            }
+        });
+		
 		
 	}
 	public void setBlackPrisoners(int prisoners){

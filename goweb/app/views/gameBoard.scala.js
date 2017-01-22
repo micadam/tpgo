@@ -2,6 +2,11 @@
 
 
 $(function() {
+
+  var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
+  var gameSocket = new WS("@routes.Application.join(tableName).webSocketURL(request)");
+
+
   var c = document.getElementById("myCanvas");
   var ctx = c.getContext("2d");
   cLeft = c.offsetLeft;
@@ -30,6 +35,25 @@ $(function() {
 
   //FUNCTION DEFINITIONS
 
+  var receiveEvent = function(event) {
+    console.log("I AM HERE YAY\n");
+    var data = JSON.parse(event.data)
+    console.log(data);
+
+    // Handle errors
+    if(data.error) {
+        chatSocket.close()
+        $("#onError span").text(data.error)
+        $("#onError").show()
+        return
+    } 
+    else {
+      placePawn(data.x, data.y, data.color);
+    }
+  }
+
+
+  gameSocket.onmessage = receiveEvent;
 
   //detects click on the game board (used for placing stones)
   c.addEventListener('click', function(event) {
@@ -113,11 +137,16 @@ $(function() {
 
   //the function called when a stone is about to be placed on the board
   function makeMove(x, y, color) {
+
+
+    gameSocket.send(JSON.stringify({x : x, y : y}));
+  }
+
+  function placePawn(x, y, color) {
     console.log("Placing piece on coordinates: " + x + ", " + y);
-    gameBoard[x][y] = color;
+
+    gameBoard[x][y] = color;    
     drawBoard();
   }
-})
-
-
+});
 

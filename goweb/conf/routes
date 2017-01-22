@@ -5,6 +5,7 @@
 # Home page
 GET     /                                 controllers.Application.index()
 GET     /gameBoard                        controllers.Application.joinTable(tableName : String ?= null)
+GET     /gameBoard/board                  controllers.Application.join(tableName)
 GET     /assets/javascripts/gameBoard.js  controllers.Application.gameBoardJs(tableName)
 
 # Map static resources from the /public folder to the /assets URL path
