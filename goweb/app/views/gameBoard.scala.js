@@ -48,7 +48,7 @@ $(function() {
         return
     } 
     else {
-      placePawn(data.x, data.y, data.color);
+		placePawn(data.x, data.y, data.color);
     }
   }
 

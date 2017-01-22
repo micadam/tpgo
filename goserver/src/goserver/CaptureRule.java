@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CaptureRule implements GameRule {
+public class CaptureRule implements GameRule{
 	int whitePrisoners=0;
 	int blackPrisoners=0;
 	private Move forbiddenByKo= new Move(-100,-100,0);
@@ -34,7 +34,6 @@ public class CaptureRule implements GameRule {
 	public int getBlackPrisoners() {
 		return blackPrisoners;
 	}
-	
 	
 	@Override
 	public int verifyMove(int x, int y, int[][] gameBoard, int color) {

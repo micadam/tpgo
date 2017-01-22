@@ -1,15 +1,15 @@
 package models;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import models.msgs.End;
 import models.msgs.Move;
-import models.msgs.Opponent;
 import models.msgs.Prisoners;
-import models.msgs.ReDo;
 import models.msgs.Sync;
 import models.msgs.Territories;
 import play.Logger;
@@ -21,7 +21,7 @@ public class Human extends UntypedActor{
     public final ActorRef             table;
     
     //TODO TODO
-    private final int myColor = 1;
+    private final int myColor;
 
     protected WebSocket.In<JsonNode>  in;
     protected WebSocket.Out<JsonNode> out;
@@ -42,17 +42,10 @@ public class Human extends UntypedActor{
 				obj.put("color", m.color);
 				out.write(obj);
 			}
-		} else if(message instanceof Opponent) {
-			Opponent o = (Opponent ) message;
-			if(o.getX() != -1){ 	//pass handling
-				setField(o.getX(),o.getY(),o.getColor());
-			}
 		} else if(message instanceof Sync ){
 			Sync s = (Sync ) message;
-			setBoard(s.getBoard());
-		} else if( message instanceof ReDo){
-			ReDo r = (ReDo ) message;
-			setField(r.getX(),r.getY(),r.getColor());
+			//TODO 
+			
 		} else if (message instanceof End){
 			//end game 
 		} else if (message instanceof Territories ){
@@ -69,18 +62,15 @@ public class Human extends UntypedActor{
 		}
 		
 	}
-	public void setField(int x, int y, int color){
-		
-	}
-	public void setBoard(int[][] board){
-		//
-	}
+	
 	public Human(WebSocket.In<JsonNode> _in,
-            WebSocket.Out<JsonNode> _out, ActorRef _table){
+            WebSocket.Out<JsonNode> _out, ActorRef _table,
+            final int _color){
 		
 		table = _table;
 		in = _in;
 		out = _out;
+		myColor = _color;
 		
         in.onMessage(new Callback<JsonNode>()
         {
