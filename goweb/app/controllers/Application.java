@@ -39,5 +39,9 @@ public class Application extends Controller {
     public static Result gameBoard() {
     	return ok(views.html.gameBoard.render("test"));
     }
+    
+    public static Result gameBoardJs (String userName) {
+    	return ok(views.js.gameBoard.render("test3"));
+    }
 
 }
