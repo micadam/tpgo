@@ -37,6 +37,7 @@ public class Human extends UntypedActor{
 			} else {
 				Move m = (Move)message;
 				ObjectNode obj = Json.newObject();
+				obj.put("type", "move");
 				obj.put("x", m.x);
 				obj.put("y", m.y);
 				obj.put("color", m.color);
@@ -45,21 +46,27 @@ public class Human extends UntypedActor{
 		} else if(message instanceof Sync ){
 			Sync s = (Sync ) message;
 			//TODO, this version is for tests only
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "sync");
+			ArrayNode arr = obj.putArray("board");
+			
 			int[][] board = s.getBoard();
-			int boardSize = 19;
-			for(int x =0; x < boardSize; x ++){
-				for(int y =0 ; y < boardSize ; y ++ ){
-					ObjectNode obj = Json.newObject();
-					obj.put("x", x);
-					obj.put("y", y);
-					obj.put("color", board[x][y]);
-					out.write(obj);
+			for(int[] row : board){
+				for(int i : row){
+					arr.add(i);
 				}
 			}
-			//TODO 
+			out.write(obj);
 			
 		} else if (message instanceof End){
-			//end game 
+			if(getSender() != table) {				
+				table.tell(message, getSelf());
+			}else {
+				ObjectNode obj = Json.newObject();
+				obj.put("type", "end");
+				out.write(obj);
+			}
+			
 		} else if (message instanceof Territories ){
 			//start and end territories
 		} else if (message instanceof Prisoners){

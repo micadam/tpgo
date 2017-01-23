@@ -49,7 +49,13 @@ $(function() {
         return
     } 
     else {
-		placePawn(data.x, data.y, data.color);
+    	if(data.type == "move" ){
+			placePawn(data.x, data.y, data.color);
+		} else if ( data.type == "sync" ){
+			fillBoard(data.board);
+		} else if ( data.type == "end" ){
+			console.log("Game ended");
+		}
     }
   }
 
@@ -154,5 +160,19 @@ $(function() {
     gameBoard[x][y] = color;    
     drawBoard();
   }
+  function fillBoard( board) {
+  
+  	console.log("filling board");
+  	
+	for(var i = 0; i < boardSize; i++) {
+		for(var j = 0; j < boardSize; j++) {
+			gameBoard[i][j] = board[i * boardSize + j];
+			console.log( board[ i * boardSize + j] + " ");
+	   }
+  	}
+  	drawBoard();
+  				
+  }
+  
 });
 

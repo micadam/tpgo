@@ -104,6 +104,7 @@ public class Table extends UntypedActor {
 			winner = "Game ended, and the winner is " + winner;
 			notifyBoth(winner);
 			notifyBoth(new End());
+			currentPlayer = null;
 		} else if (  x < 0 || y < 0 || x >= boardSize || y >= boardSize ){
 			// Do nothing? XD 
 		} else if ( gameBoard[x][y] != 0 ){
@@ -128,6 +129,8 @@ public class Table extends UntypedActor {
 		}
 	}
 	
+	boolean whiteReady = false;
+	boolean blackReady = false;
 	private int[][] territoriesBoard = new int[boardSize][boardSize];
 	private void tagTerritories(Move move ){
 		int x = move.x;
@@ -135,6 +138,17 @@ public class Table extends UntypedActor {
 		int color = move.color;
 		if(x == -1){		//ready
 			//TODO
+			if(getSender() == whitePlayer){
+				whiteReady = true;
+			} else {
+				blackReady = true;
+			}
+			if(whiteReady && blackReady ){
+				//calculate score
+				notifyBoth(new End());
+				territoriesMode = false;
+				currentPlayer = null;
+			}
 		} else if (  x >= 0 && y >= 0 && x < boardSize && y < boardSize && territoriesBoard[x][y] == 0 ){
 			boolean[][] visited = new boolean[boardSize][boardSize];
 			PawnGroupAlgorithm.getBreathsOfThisGroup(x,y,visited,territoriesBoard,gameBoard,color,0,1);
