@@ -44,6 +44,18 @@ public class Human extends UntypedActor{
 			}
 		} else if(message instanceof Sync ){
 			Sync s = (Sync ) message;
+			//TODO, this version is for tests only
+			int[][] board = s.getBoard();
+			int boardSize = 19;
+			for(int x =0; x < boardSize; x ++){
+				for(int y =0 ; y < boardSize ; y ++ ){
+					ObjectNode obj = Json.newObject();
+					obj.put("x", x);
+					obj.put("y", y);
+					obj.put("color", board[x][y]);
+					out.write(obj);
+				}
+			}
 			//TODO 
 			
 		} else if (message instanceof End){

@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
+import models.PawnGroupAlgorithm;
 import models.msgs.*;
 import play.libs.Akka;
 import play.mvc.WebSocket;
@@ -66,26 +67,16 @@ public class Table extends UntypedActor {
                 getSender().tell("OK", getSelf());
 			}
 		} else if(message instanceof Move){
-			if(getSender() == currentPlayer) {
+			if(territoriesMode) {
+				tagTerritories((Move) message);
+			} else if(getSender() == currentPlayer) {
 				System.out.println("Got the message from the right player");
-				//TODO move checks
 				checkMove((Move) message);
-				
-				/*
-				whitePlayer.tell(message, getSelf());
-				//TODO this should be earlier, using for testing
-				 //if black is null, currentPlayer is also null so we never enter this if
-				if(blackPlayer != null) {					
-					blackPlayer.tell(message, getSelf());
-				}
-				*/
 			} else {
 				System.out.println("Got a message from the wrong player");
 			}
 			
-		} else if(message instanceof Territories){
-			//change mode
-		} 
+		}  
 	}
 	
 	
@@ -101,6 +92,9 @@ public class Table extends UntypedActor {
 			captureRule.dismissKo();
 			if(passFlag){
 				//Doubple pass handling in here
+				territoriesMode = true;
+				fillTerritories();
+				notifyBoth(new Territories());
 			} else 
 				passFlag = true;
 		} else if ( x == -2 ){ 	//surrender
@@ -132,6 +126,32 @@ public class Table extends UntypedActor {
 		}
 	}
 	
+	private int[][] territoriesBoard = new int[boardSize][boardSize];
+	private void tagTerritories(Move move ){
+		int x = move.x;
+		int y = move.y;
+		int color = move.color;
+		if(x == -1){		//ready
+			//TODO
+		} else if (  x >= 0 && y >= 0 && x < boardSize && y < boardSize && territoriesBoard[x][y] == 0 ){
+			boolean[][] visited = new boolean[boardSize][boardSize];
+			PawnGroupAlgorithm.getBreathsOfThisGroup(x,y,visited,territoriesBoard,gameBoard,color,0,1);
+			Sync sync = new Sync(territoriesBoard);
+			notifyBoth(sync);
+		}
+	}
+	private void fillTerritories(){
+		territoriesBoard = new int[boardSize][boardSize];
+		boolean[][] visitedTemp = new boolean[boardSize][boardSize];
+		for(int x =0; x < boardSize; x ++ ){
+			for( int y =0 ; y < boardSize ; y ++ ) {
+				if(!visitedTemp[x][y]){
+					PawnGroupAlgorithm.fillThisGroup(x, y, visitedTemp, territoriesBoard, gameBoard);
+				}
+			}
+		}
+		
+	}
 	private void swapPlayers(){
 		currentPlayer = (currentPlayer == whitePlayer ? blackPlayer : whitePlayer);
 	}
