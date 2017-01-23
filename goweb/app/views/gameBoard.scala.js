@@ -8,6 +8,7 @@ $(function() {
 
 
   var c = document.getElementById("myCanvas");
+  var passButton = document.getElementById("passButton");
   var ctx = c.getContext("2d");
   cLeft = c.offsetLeft;
   cTop = c.offsetTop;
@@ -54,7 +55,12 @@ $(function() {
 
 
   gameSocket.onmessage = receiveEvent;
-
+  
+  //passButton handling
+  passButton.addEventListener('click', function(event) {
+  	makeMove(-1,-1,0);
+  });
+  
   //detects click on the game board (used for placing stones)
   c.addEventListener('click', function(event) {
     var x = event.pageX - cLeft;

@@ -89,6 +89,7 @@ public class Table extends UntypedActor {
 		int y = m.y;
 		int color = m.color;
 		if(x == -1 ){		//pass
+			System.out.println("Pass");
 			captureRule.dismissKo();
 			if(passFlag){
 				//Doubple pass handling in here
@@ -97,6 +98,7 @@ public class Table extends UntypedActor {
 				notifyBoth(new Territories());
 			} else 
 				passFlag = true;
+			swapPlayers();
 		} else if ( x == -2 ){ 	//surrender
 			String winner = (currentPlayer == whitePlayer ? "white" : "black");
 			winner = "Game ended, and the winner is " + winner;
