@@ -9,6 +9,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import akka.actor.Kill;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import models.PawnGroupAlgorithm;
@@ -24,7 +25,7 @@ public class Table extends UntypedActor {
     // Members of this table.
     private ActorRef whitePlayer;
     private ActorRef blackPlayer;
-    
+    private String tableName;
     private ActorRef currentPlayer = null;
     private boolean territoriesMode = false;
     
@@ -32,7 +33,7 @@ public class Table extends UntypedActor {
         // Send the Join message to the table
     	ActorRef table = tables.get(name);
     	if(table == null){
-    		table = Akka.system().actorOf(Props.create(Table.class));
+    		table = Akka.system().actorOf(Props.create(Table.class,name));
     		tables.put(name, table);
     	}
         String result = (String)Await.result(ask(table,new Join(name,in,out), 1000), Duration.create(1, SECONDS)); 
@@ -52,16 +53,22 @@ public class Table extends UntypedActor {
                         Props.create(Human.class, join.getIn(), join.getOut(), getSelf(),color ));
             	String text =  "New player entered the game"; 
             	if(whitePlayer == null){
+            		
             		whitePlayer = player;
             		whitePlayer.tell(text, getSelf());
+            		
+            		blackPlayer = Akka.system().actorOf(Props.create(Bot.class, getSelf(),Move.BLACK));
+            		currentPlayer = blackPlayer;
+            		Go go = new Go();
+            		blackPlayer.tell(go, getSelf());			//starts the game 
+            		System.out.println("[Table " + tableName + " ] game started");
             	}
             	else{
             		blackPlayer = player;
-            		whitePlayer.tell(text, getSelf());
-            		blackPlayer.tell(text, getSelf());
+            		notifyBoth(text);
+            		currentPlayer = blackPlayer;
             		Go go = new Go();
             		blackPlayer.tell(go, getSelf());			//starts the game 
-            		currentPlayer = blackPlayer;
             	}  
             	
                 getSender().tell("OK", getSelf());
@@ -104,7 +111,7 @@ public class Table extends UntypedActor {
 			winner = "Game ended, and the winner is " + winner;
 			notifyBoth(winner);
 			notifyBoth(new End());
-			currentPlayer = null;
+			endGame();
 		} else if (  x < 0 || y < 0 || x >= boardSize || y >= boardSize ){
 			// Do nothing? XD 
 		} else if ( gameBoard[x][y] != 0 ){
@@ -146,8 +153,9 @@ public class Table extends UntypedActor {
 			if(whiteReady && blackReady ){
 				//calculate score
 				notifyBoth(new End());
-				territoriesMode = false;
-				currentPlayer = null;
+				endGame();
+				
+				
 			}
 		} else if (  x >= 0 && y >= 0 && x < boardSize && y < boardSize && territoriesBoard[x][y] == 0 ){
 			boolean[][] visited = new boolean[boardSize][boardSize];
@@ -174,5 +182,18 @@ public class Table extends UntypedActor {
 	private void notifyBoth(Object msg){
 		whitePlayer.tell(msg, getSelf());
 		blackPlayer.tell(msg, getSelf());
+	}
+	public void endGame(){
+		territoriesMode = false;
+		currentPlayer = null;
+		tables.remove(tableName,this);
+		getSelf().tell(Kill.getInstance(),getSelf());
+	}
+	@Override 
+	public void postStop(){
+		System.out.println("[Table] table ( " + tableName + " ) out" );
+	}
+	public Table(String name){
+		tableName = name;
 	}
 }

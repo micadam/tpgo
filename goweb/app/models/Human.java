@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import akka.actor.ActorRef;
+import akka.actor.Kill;
 import akka.actor.UntypedActor;
 import models.msgs.End;
 import models.msgs.Move;
@@ -66,6 +67,7 @@ public class Human extends UntypedActor{
 				obj.put("type", "end");
 				out.write(obj);
 			}
+			getSelf().tell(Kill.getInstance(), getSelf());
 			
 		} else if (message instanceof Territories ){
 			//start and end territories
@@ -81,7 +83,10 @@ public class Human extends UntypedActor{
 		}
 		
 	}
-	
+	@Override
+	public void postStop(){
+		System.out.println("[Human] human out");
+	}
 	public Human(WebSocket.In<JsonNode> _in,
             WebSocket.Out<JsonNode> _out, ActorRef _table,
             final int _color){
