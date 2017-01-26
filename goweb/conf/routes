@@ -4,9 +4,9 @@
 
 # Home page
 GET     /                                 controllers.Application.index()
-GET     /gameBoard                        controllers.Application.joinTable(tableName : String ?= null)
-GET     /gameBoard/board                  controllers.Application.join(tableName)
-GET     /assets/javascripts/gameBoard.js  controllers.Application.gameBoardJs(tableName)
+GET     /gameBoard                        controllers.Application.joinTable(tableName : String ?= null, bot : String ?= "")
+GET     /gameBoard/board                  controllers.Application.join(tableName, bot)
+GET     /assets/javascripts/gameBoard.js  controllers.Application.gameBoardJs(tableName, bot)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

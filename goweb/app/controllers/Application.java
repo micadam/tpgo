@@ -14,21 +14,22 @@ public class Application extends Controller {
         return ok(index.render("Your new application is ready."));
     }
     
-    public static Result joinTable(String tableName) {
+    public static Result joinTable(String tableName, String bot) {
     	
     	System.out.println(tableName);
 
-    	return ok(views.html.gameBoard.render(tableName));
+    	return ok(views.html.gameBoard.render(tableName, bot));
     	
     }
     
-    public static WebSocket<JsonNode> join(final String tableName) {
+    public static WebSocket<JsonNode> join(final String tableName, String bot) {
+    	boolean botMode = bot.equals("bot");
         return new WebSocket<JsonNode>() {
             // Called when the Websocket Handshake is done.
             public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out){
                 // Join the table
                 try {                	
-                	Table.join(tableName, in, out);
+                	Table.join(tableName, in, out, botMode);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -36,8 +37,8 @@ public class Application extends Controller {
         };
     }
     
-    public static Result gameBoardJs (String tableName) {
-    	return ok(views.js.gameBoard.render(tableName));
+    public static Result gameBoardJs (String tableName, String bot) {
+    	return ok(views.js.gameBoard.render(tableName, bot));
     }
 
 }

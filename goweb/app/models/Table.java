@@ -28,12 +28,13 @@ public class Table extends UntypedActor {
     private String tableName;
     private ActorRef currentPlayer = null;
     private boolean territoriesMode = false;
-    
-    public static void join(final String name, WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out ) throws Exception{
+    private boolean botMode = false;
+    public static void join(final String name, WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out, 
+    		boolean botMode) throws Exception{
         // Send the Join message to the table
     	ActorRef table = tables.get(name);
     	if(table == null){
-    		table = Akka.system().actorOf(Props.create(Table.class,name));
+    		table = Akka.system().actorOf(Props.create(Table.class,name, botMode));
     		tables.put(name, table);
     	}
         String result = (String)Await.result(ask(table,new Join(name,in,out), 1000), Duration.create(1, SECONDS)); 
@@ -56,12 +57,13 @@ public class Table extends UntypedActor {
             		
             		whitePlayer = player;
             		whitePlayer.tell(text, getSelf());
-            		
-            		blackPlayer = Akka.system().actorOf(Props.create(Bot.class, getSelf(),Move.BLACK));
-            		currentPlayer = blackPlayer;
-            		Go go = new Go();
-            		blackPlayer.tell(go, getSelf());			//starts the game 
-            		System.out.println("[Table " + tableName + " ] game started");
+            		if(botMode){
+	            		blackPlayer = Akka.system().actorOf(Props.create(Bot.class, getSelf(),Move.BLACK));
+	            		currentPlayer = blackPlayer;
+	            		Go go = new Go();
+	            		blackPlayer.tell(go, getSelf());			//starts the game 
+	            		System.out.println("[Table " + tableName + " ] game started");
+            		}
             	}
             	else{
             		blackPlayer = player;
@@ -69,6 +71,7 @@ public class Table extends UntypedActor {
             		currentPlayer = blackPlayer;
             		Go go = new Go();
             		blackPlayer.tell(go, getSelf());			//starts the game 
+            		System.out.println("[Table " + tableName + " ] game started");
             	}  
             	
                 getSender().tell("OK", getSelf());
@@ -193,7 +196,8 @@ public class Table extends UntypedActor {
 	public void postStop(){
 		System.out.println("[Table] table ( " + tableName + " ) out" );
 	}
-	public Table(String name){
+	public Table(String name, boolean botMode){
 		tableName = name;
+		this.botMode = botMode;
 	}
 }

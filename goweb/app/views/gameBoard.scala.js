@@ -1,10 +1,10 @@
-@(tableName : String)
+@(tableName : String, bot : String)
 
 
 $(function() {
 
   var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
-  var gameSocket = new WS("@routes.Application.join(tableName).webSocketURL(request)");
+  var gameSocket = new WS("@routes.Application.join(tableName, bot).webSocketURL(request)");
 
 
   var c = document.getElementById("myCanvas");
