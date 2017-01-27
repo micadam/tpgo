@@ -146,16 +146,8 @@ public class CaptureRule {
 		System.out.println("[SERVR] Checking for groups with no breaths");
 		for(int i = 0; i < boardSize; i++) {
 			for(int j = 0; j < boardSize; j++) {
-				if(groupOf[i][j] != -1  && breathsOfGroup.get(groupOf[i][j]) == 0) {
+				if(groupOf[i][j] > 0  && breathsOfGroup.get(groupOf[i][j]) == 0) {
 					System.out.println("[SERVER]Removing piece group " + groupOf[i][j]);
-					if(gameBoard[i][j] == Move.WHITE){						
-						whitePrisoners++;
-					}
-					else if (gameBoard[i][j] == Move.BLACK){						
-						blackPrisoners++;
-					} else {
-						System.out.println("[SERVER] Unexpected board piece in CaptureRule");
-					}
 					captured++;
 					gameBoard[i][j] = 0;
 					if(groupOf[i][j] != 0)
@@ -164,12 +156,33 @@ public class CaptureRule {
 				}
 			}
 		}
-		if(captured==1 || ( captured==2 && breathsOfGroup.get(0)==0)) {			
+		
+		if(gameBoard[x][y] == Move.WHITE) 	// opponent is captured
+			blackPrisoners += captured;
+		else 
+			whitePrisoners += captured;
+		
+		if(captured == 1 ) {			
 			System.out.println("Ko rule active");
 		} else {			
 			dismissKo();
 		}
 		
+		if(captured == 0 && breathsOfGroup.get(0) == 0 ){
+			for(int i = 0; i < boardSize; i++) {
+				for(int j = 0; j < boardSize; j++) {
+					if(groupOf[i][j] == 0 ) {
+						System.out.println("[SERVER]Removing piece group " + groupOf[i][j]);
+						captured++;
+						gameBoard[i][j] = 0;
+					}
+				}
+			}
+			if(gameBoard[x][y] == Move.WHITE)
+				whitePrisoners += captured;
+			else 
+				blackPrisoners += captured;
+		}
 		boardChanged = (captured > 0 ? 1 : 0) ;
 		return boardChanged;
 	}
