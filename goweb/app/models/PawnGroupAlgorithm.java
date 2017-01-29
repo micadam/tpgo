@@ -22,7 +22,7 @@ public class PawnGroupAlgorithm {
 	 * @param breathColor color of this groups breath, should be different than working color
 	 * @return
 	 */
-	public static int getBreathsOfThisGroup(int x,int y,boolean[][] visited, int[][] groupOf, int[][] gameBoard, int workingGroup,int workingColor,int breathColor){
+	public static int getBreathsOfThisGroup(int x,int y,boolean[][] visited, int[][] groupOf, int[][] gameBoard, int workingGroup, int workingColor, int breathColor){
 		int boardSize=gameBoard[0].length;
 		LinkedList<Integer> xQueue= new LinkedList<Integer>();
 		LinkedList<Integer> yQueue= new LinkedList<Integer>();
@@ -54,7 +54,6 @@ public class PawnGroupAlgorithm {
 	public static void fillThisGroup(int x,int y,boolean[][] visited1, int[][] groupOf, int[][] gameBoard){
 		if(gameBoard[x][y]!=0 )
 			return;
-		System.out.println("X Y " + x + " " + y);
 		int boardSize=gameBoard.length;
 		boolean visited[][] = new boolean[boardSize][boardSize];
 		ArrayList<Integer> xQueue= new ArrayList<Integer>();
@@ -62,8 +61,9 @@ public class PawnGroupAlgorithm {
 		xQueue.add(x);
 		yQueue.add(y);
 		int newX, newY;
-		int black=0,white=0;
-		int index =0;
+		int black = 0;
+		int white = 0;
+		int index = 0;
 		while(index < xQueue.size()) {								//keep adding pieces until we visited the whole group
 			int curX = xQueue.get(index);											//take a queued piece
 			int curY = yQueue.get(index);
@@ -75,12 +75,9 @@ public class PawnGroupAlgorithm {
 					visited[newX][newY]=true;
 					visited1[newX][newY]=true;
 					if(gameBoard[newX][newY] == Move.WHITE){		
-						
 						white++;
-						System.out.println("Białe : " + white);
 					} else if( gameBoard[newX][newY]== Move.BLACK){
 						black++;
-						System.out.println("Czorne XD  : " +  black);
 					}
 					else {	//it's an empty  place, queue it
 						xQueue.add(newX);
@@ -92,16 +89,14 @@ public class PawnGroupAlgorithm {
 		}
 		int workingGroup=0;
 		if(black == 0 && white !=0){
-			workingGroup=Move.WHITE;
+			workingGroup = Move.WHITE;
 		}else if( white == 0 && black != 0) {
 			workingGroup = Move.BLACK;
 		}
-		System.out.println("WORKING GRoup " + workingGroup);
-		if(workingGroup!= 0 ){
+		if(workingGroup != 0 ){
 			index--;
 			while(index>=0){
 				groupOf[xQueue.get(index)][yQueue.get(index)]= workingGroup;
-				System.out.println("pop");
 				index--;
 			}
 		}

@@ -1,7 +1,6 @@
 package models;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -9,6 +8,7 @@ import akka.actor.ActorRef;
 import akka.actor.Kill;
 import akka.actor.UntypedActor;
 import models.msgs.End;
+import models.msgs.Go;
 import models.msgs.Move;
 import models.msgs.Prisoners;
 import models.msgs.Sync;
@@ -49,6 +49,7 @@ public class Human extends UntypedActor{
 			//TODO, this version is for tests only
 			ObjectNode obj = Json.newObject();
 			obj.put("type", "sync");
+			obj.put("territories", s.isTerritories());
 			ArrayNode arr = obj.putArray("board");
 			
 			int[][] board = s.getBoard();
@@ -78,6 +79,10 @@ public class Human extends UntypedActor{
 		} else if (message instanceof String){
 			String s = (String ) message;
 			System.out.println(s);
+		} else if (message instanceof Go) {
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "go");
+			out.write(obj);
 		} else {
 			System.out.println("Unhandled message error");
 		}

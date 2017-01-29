@@ -28,6 +28,7 @@ public class Bot extends UntypedActor{
 		System.out.println("[ACTOR]: received message: " + message.toString());
 		if( message instanceof Move ){
 			Move m = ( Move) message;
+			System.out.println("[BOT] received move: " + m.x + "  " + m.y + "  " + m.color);
 			Board[m.x][m.y]= m.color;
 			if (myLast.x == m.x && myLast.y == m.y ){
 				wrongMoveCount ++;
@@ -36,12 +37,10 @@ public class Bot extends UntypedActor{
 				wrongMoveCount = 0;
 				opponentsMove = m;
 			}
-			makeMove();
 			
 		} else if(message instanceof Sync ){
 			Sync s = (Sync ) message;
 			Board = s.getBoard();
-			makeMove();
 
 		} else if (message instanceof Go){
 			makeMove();
@@ -51,7 +50,7 @@ public class Bot extends UntypedActor{
 		} else if (message instanceof Territories ){
 			//start and end territories
 		} else {
-			System.out.println("[BOT] Unhandled message");
+			System.out.println("[BOT] Unhandled message: " + message.toString());
 		}
 	}
 	@Override

@@ -5,25 +5,36 @@ $(function() {
 
   var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
   var gameSocket = new WS("@routes.Application.join(tableName, bot).webSocketURL(request)");
-
-
   var c = document.getElementById("myCanvas");
-  var passButton = document.getElementById("passButton");
+  var div = document.getElementById("board");
   var ctx = c.getContext("2d");
-  cLeft = c.offsetLeft;
-  cTop = c.offsetTop;
+  var passButton = document.getElementById("passButton");
+  var gameInfo = document.getElementById('gameInfo');
+  var moveInfo = document.getElementById('moveInfo');
+
+  gameInfo.innerHTML = "Waitng for an opponent...";
+  moveInfo.innerHTML = "Your move!";
+  
+  c.width = div.clientWidth;
+  c.height = div.clientHeight;
+
   var boardSize = 19;
-  var fieldSize = 50;
+  var fieldSize = c.height / (boardSize + 1);
   var pawnSize = fieldSize/2;
+
   var whiteColor = 1;
   var blackColor = -1;
-
+  var whitePrisoners = 0;
+  var blackPrisoners = 0;
   var gameBoard = new Array(boardSize);
+  var territoriesBoard = new Array(boardSize);
 
   for(var i = 0; i < boardSize; i++) {
   	gameBoard[i] = new Array(boardSize);
+    territoriesBoard[i] = new Array(boardSize);
   	for(var j = 0; j < boardSize; j++) {
   		gameBoard[i][j] = 0;
+      territoriesBoard[i][j] = 0;
     }
   }
 
@@ -37,9 +48,7 @@ $(function() {
   //FUNCTION DEFINITIONS
 
   var receiveEvent = function(event) {
-    console.log("I AM HERE YAY\n");
     var data = JSON.parse(event.data)
-    console.log(data);
 
     // Handle errors
     if(data.error) {
@@ -50,12 +59,22 @@ $(function() {
     } 
     else {
     	if(data.type == "move" ){
-			placePawn(data.x, data.y, data.color);
-		} else if ( data.type == "sync" ){
-			fillBoard(data.board);
-		} else if ( data.type == "end" ){
-			console.log("Game ended");
-		}
+		  	placePawn(data.x, data.y, data.color);
+		  } else if ( data.type == "sync" ){
+        if(data.territories === false) {
+          fillBoard(data.board);
+        } else {
+          fillTerritories(data.board);
+        }
+		  } else if ( data.type == "end" ){
+		  	 console.log("Game ended");
+		  } else if ( data.type == "go") {
+          moveInfo.innerHTML = "Your move!";
+          alert("Your move!");
+      } else if (data.type == "prisoners") {
+          whitePrisoners = data.white;
+          blackPrisoners = data.black;
+      }
     }
   }
 
@@ -68,7 +87,10 @@ $(function() {
   });
   
   //detects click on the game board (used for placing stones)
+  //calculates the closest spot (but not further than pawnSize/2) and tries to place a stone there
   c.addEventListener('click', function(event) {
+    cLeft = c.offsetLeft;
+    cTop = c.offsetTop;
     var x = event.pageX - cLeft;
     var y = event.pageY - cTop;
 
@@ -91,7 +113,8 @@ $(function() {
     }
 
     console.log("ee " + closestX + " ff " + closestY);
-    if(Math.sqrt((x - closestX) * (x - closestX) + (y - closestY) * (y - closestY)) < pawnSize / 2) {  
+    if(Math.sqrt((x - closestX) * (x - closestX) + (y - closestY) * (y - closestY)) < pawnSize) {  
+        console.log("here");
         closestX = closestX / fieldSize - 1;
         closestY = closestY / fieldSize - 1;
         makeMove(closestX, closestY, 1);
@@ -112,8 +135,8 @@ $(function() {
       ctx.stroke();
     }
     
-    if(boardSize == 19) {     
-      for(var i=4;i<boardSize;i+=6){    //4 bo jeszcze to puste
+    if(boardSize == 19) {     //draw the little circles around the board
+      for(var i=4;i<boardSize;i+=6){    
         for(var j=4;j<boardSize;j+=6){
       
           ctx.beginPath();
@@ -144,6 +167,23 @@ $(function() {
       }
     }
 
+    for(var i = 0; i < boardSize; i++) {
+      for(var j = 0; j < boardSize; j++) {
+        var draw = false;
+        if(territoriesBoard[i][j] === whiteColor) {
+          ctx.fillStyle="#ffffff";
+          draw = true;
+        } else if (territoriesBoard[i][j] === blackColor) {
+          ctx.fillStyle="#000000";
+          draw = true;
+        }
+        
+        if(draw === true) {
+          ctx.fillRect((i + 1) * fieldSize - fieldSize/6, (j + 1) * fieldSize - fieldSize/6, fieldSize/3, fieldSize/3);
+        }
+      }
+    }
+
 
   }
 
@@ -154,24 +194,36 @@ $(function() {
     gameSocket.send(JSON.stringify({x : x, y : y}));
   }
 
+
   function placePawn(x, y, color) {
     console.log("Placing piece on coordinates: " + x + ", " + y);
 
     gameBoard[x][y] = color;    
     drawBoard();
   }
+
   function fillBoard( board) {
   
   	console.log("filling board");
   	
-	for(var i = 0; i < boardSize; i++) {
-		for(var j = 0; j < boardSize; j++) {
-			gameBoard[i][j] = board[i * boardSize + j];
-			console.log( board[ i * boardSize + j] + " ");
-	   }
-  	}
-  	drawBoard();
-  				
+  	for(var i = 0; i < boardSize; i++) {
+  		for(var j = 0; j < boardSize; j++) {
+  			gameBoard[i][j] = board[i * boardSize + j];
+  	   }
+    	}
+    	drawBoard();				
+  }
+
+  function fillTerritories( board) {
+  
+    console.log("filling board");
+    
+    for(var i = 0; i < boardSize; i++) {
+      for(var j = 0; j < boardSize; j++) {
+        territoriesBoard[i][j] = board[i * boardSize + j];
+       }
+      }
+      drawBoard();        
   }
   
 });

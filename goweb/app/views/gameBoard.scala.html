@@ -1,11 +1,21 @@
 @(username : String, bot : String)
 
 @main(username) {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/gameBoard.css")">
   
-  <button id="passButton" type ="button">Pass</button>
-  <div style="clear:both"></div>
-  <canvas id="myCanvas" width="1000" height="1000" style="border:1px solid #000000;">
-  </canvas>
   
-  <script type="text/javascript" src="@routes.Application.gameBoardJs(username, bot)">
-</script>}
+  <span id = "infoText">
+    <h1 id = "gameInfo"> </h1>
+    <h2 id = "moveInfo"> </h2>
+   </span>
+  
+  <div id = "board">  
+    <canvas id="myCanvas" style="border:1px solid #000000;"/>
+    <script type="text/javascript" src="@routes.Application.gameBoardJs(username, bot)"> </script>
+  </div>
+  
+  <div id = "buttons">
+    <button id="passButton" type ="button">Pass</button>
+    <button id = "surrenderButton" type = "button">Surrender</button>
+  </div>
+}

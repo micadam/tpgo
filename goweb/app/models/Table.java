@@ -29,6 +29,14 @@ public class Table extends UntypedActor {
     private ActorRef currentPlayer = null;
     private boolean territoriesMode = false;
     private boolean botMode = false;
+    private final int boardSize = 19;
+    private boolean passFlag;
+    private int[][] gameBoard = new int[boardSize][boardSize];
+    private int[][] territoriesBoard = new int[boardSize][boardSize];
+    private CaptureRule captureRule = new CaptureRule();
+    boolean whiteReady = false;
+    boolean blackReady = false;
+    
     public static void join(final String name, WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out, 
     		boolean botMode) throws Exception{
         // Send the Join message to the table
@@ -90,10 +98,6 @@ public class Table extends UntypedActor {
 	}
 	
 	
-	private final int boardSize = 19;
-	private boolean passFlag;
-	private int[][] gameBoard = new int[boardSize][boardSize];
-	private CaptureRule captureRule = new CaptureRule();
 	private void checkMove(Move m){
 		int x = m.x;
 		int y = m.y;
@@ -102,10 +106,10 @@ public class Table extends UntypedActor {
 			System.out.println("Pass");
 			captureRule.dismissKo();
 			if(passFlag){
-				//Doubple pass handling in here
+				//Double pass handling in here
 				territoriesMode = true;
 				fillTerritories();
-				notifyBoth(new Territories());
+				notifyBoth(new Sync(territoriesBoard, true));
 			} else 
 				passFlag = true;
 			swapPlayers();
@@ -118,13 +122,14 @@ public class Table extends UntypedActor {
 		} else if (  x < 0 || y < 0 || x >= boardSize || y >= boardSize ){
 			// Do nothing? XD 
 		} else if ( gameBoard[x][y] != 0 ){
+			//the spot was taken, tell the player that
 			currentPlayer.tell(new Move(x,y,gameBoard[x][y]), getSelf());
 		} else {
 			passFlag = false;
 			int boardChanged = captureRule.verifyMove(x, y, gameBoard, color);
 			if(boardChanged > 0) {
 				gameBoard[x][y] = color;
-				Sync sync = new Sync(gameBoard);
+				Sync sync = new Sync(gameBoard, false);
 				notifyBoth(sync);
 				swapPlayers();
 			} else if(boardChanged == -1) {
@@ -139,13 +144,12 @@ public class Table extends UntypedActor {
 		}
 	}
 	
-	boolean whiteReady = false;
-	boolean blackReady = false;
-	private int[][] territoriesBoard = new int[boardSize][boardSize];
 	private void tagTerritories(Move move ){
 		int x = move.x;
 		int y = move.y;
-		int color = move.color;
+		//int color = move.color;
+		int color = ((territoriesBoard[x][y] + 2) % 3) - 1; //it should cycle between black white and empty
+		System.out.println("Fill color: " + color);
 		if(x == -1){		//ready
 			//TODO
 			if(getSender() == whitePlayer){
@@ -160,13 +164,14 @@ public class Table extends UntypedActor {
 				
 				
 			}
-		} else if (  x >= 0 && y >= 0 && x < boardSize && y < boardSize && territoriesBoard[x][y] == 0 ){
+		} else if (  x >= 0 && y >= 0 && x < boardSize && y < boardSize && gameBoard[x][y] == 0 ){
 			boolean[][] visited = new boolean[boardSize][boardSize];
 			PawnGroupAlgorithm.getBreathsOfThisGroup(x,y,visited,territoriesBoard,gameBoard,color,0,1);
-			Sync sync = new Sync(territoriesBoard);
+			Sync sync = new Sync(territoriesBoard, true);
 			notifyBoth(sync);
 		}
 	}
+	
 	private void fillTerritories(){
 		territoriesBoard = new int[boardSize][boardSize];
 		boolean[][] visitedTemp = new boolean[boardSize][boardSize];
@@ -181,6 +186,7 @@ public class Table extends UntypedActor {
 	}
 	private void swapPlayers(){
 		currentPlayer = (currentPlayer == whitePlayer ? blackPlayer : whitePlayer);
+		currentPlayer.tell(new Go(), getSelf());
 	}
 	private void notifyBoth(Object msg){
 		whitePlayer.tell(msg, getSelf());
