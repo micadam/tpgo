@@ -72,9 +72,12 @@ public class Human extends UntypedActor{
 			obj.put("type", "territories");
 			out.write(obj);
 		} else if (message instanceof Prisoners){
-			Prisoners p = (Prisoners ) message;
-			setWhitePrisoners(p.getWhitePrisoners());
-			setBlackPrisoners(p.getBlackPrisoners());
+			Prisoners p = (Prisoners)message;
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "prisoners");
+			obj.put("white", p.getWhitePrisoners());
+			obj.put("black", p.getBlackPrisoners());
+			out.write(obj);
 		} else if (message instanceof String){
 			String s = (String ) message;
 			System.out.println(s);
@@ -130,14 +133,6 @@ public class Human extends UntypedActor{
                 }
                 
             }
-        });
-		
-		
-	}
-	public void setBlackPrisoners(int prisoners){
-		
-	}
-	public void setWhitePrisoners(int prisoners){
-		
+        });	
 	}
 }

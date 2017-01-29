@@ -127,6 +127,7 @@ public class Table extends UntypedActor {
 				gameBoard[x][y] = color;
 				Sync sync = new Sync(gameBoard, false);
 				notifyBoth(sync);
+				notifyBoth(new Prisoners(captureRule.getWhitePrisoners(), captureRule.getBlackPrisoners()));
 				swapPlayers();
 			} else if(boardChanged == -1) {
 				//currentPlayer.sendResponse("NO");

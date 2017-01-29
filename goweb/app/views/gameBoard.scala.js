@@ -13,6 +13,9 @@ $(function() {
   var gameInfo = document.getElementById('gameInfo');
   var moveInfo = document.getElementById('moveInfo');
 
+  var whitePrisonersNumber = document.getElementById('whitePrisonersNumber');
+  var blackPrisonersNumber = document.getElementById('blackPrisonersNumber');
+
   gameInfo.innerHTML = "Waitng for an opponent...";
   
   c.width = div.clientWidth;
@@ -25,8 +28,6 @@ $(function() {
 
   var whiteColor = 1;
   var blackColor = -1;
-  var whitePrisoners = 0;
-  var blackPrisoners = 0;
   var gameBoard = new Array(boardSize);
   var territoriesBoard = new Array(boardSize);
 
@@ -71,6 +72,19 @@ $(function() {
         } else {
           fillTerritories(data.board);
         }
+      } else if ( data.type == "territories") {
+          moveInfo.innerHTML = "Territories mode";
+      } else if ( data.type == "go") {
+          moveInfo.innerHTML = "Your move!";
+          alert("Your move!");
+      } else if (data.type == "dontGo") {
+          moveInfo.innerHTML = "Wait for the opponent to move...";
+      } else if (data.type == "prisoners") {
+          whitePrisonersNumber.innerHTML = data.white;
+          blackPrisonersNumber.innerHTML = data.black;
+      } else if (data.type == "start") {
+          myColor = data.color;
+          gameInfo.innerHTML = "You are player " + myColor;
 		  } else if ( data.type == "end" ){
 		  	 console.log("Game ended");
          var winner = data.winner;
@@ -83,19 +97,6 @@ $(function() {
          }
 
          alert(endMessage + '\n' + congratulations);
-      } else if ( data.type == "territories") {
-          moveInfo.innerHTML = "Territories mode";
-		  } else if ( data.type == "go") {
-          moveInfo.innerHTML = "Your move!";
-          alert("Your move!");
-      } else if (data.type == "dontGo") {
-          moveInfo.innerHTML = "Wait for the opponent to move...";
-      } else if (data.type == "prisoners") {
-          whitePrisoners = data.white;
-          blackPrisoners = data.black;
-      } else if (data.type == "start") {
-          myColor = data.color;
-          gameInfo.innerHTML = "You are player " + myColor;
       }
     }
   }
