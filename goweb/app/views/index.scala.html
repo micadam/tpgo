@@ -1,9 +1,12 @@
 @(message: String)
 
 @main("Welcome to Play") {
-        
-        <form action="@routes.Application.joinTable()" class="pull-right">
-        <input id="tableName" name="tableName" class="input-small" type="text" placeholder="table name">
-        <button class="btn" type="submit">Sign in</button>
-        <input type="checkbox" name="bot" value="bot" > Bot <br>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/index.css")">
+        <div id = "buttons">
+          <h3>Welcome to Go! Enter the name of the table you with to join!</h3>
+          <form action="@routes.Application.joinTable()" class="pull-right">
+          <input id="tableName" name="tableName" class="input-small" type="text" placeholder="table name">
+          <button class="btn" type="submit">Join</button>
+          <input type="checkbox" name="bot" value="bot" > Bot <br>
+        </div>
 }
