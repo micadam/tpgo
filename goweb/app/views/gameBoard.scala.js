@@ -9,11 +9,11 @@ $(function() {
   var div = document.getElementById("board");
   var ctx = c.getContext("2d");
   var passButton = document.getElementById("passButton");
+  var surrenderButton = document.getElementById("surrenderButton");
   var gameInfo = document.getElementById('gameInfo');
   var moveInfo = document.getElementById('moveInfo');
 
   gameInfo.innerHTML = "Waitng for an opponent...";
-  moveInfo.innerHTML = "Your move!";
   
   c.width = div.clientWidth;
   c.height = div.clientHeight;
@@ -21,6 +21,7 @@ $(function() {
   var boardSize = 19;
   var fieldSize = c.height / (boardSize + 1);
   var pawnSize = fieldSize/2;
+  var territorySquareSize = pawnSize;
 
   var whiteColor = 1;
   var blackColor = -1;
@@ -28,6 +29,8 @@ $(function() {
   var blackPrisoners = 0;
   var gameBoard = new Array(boardSize);
   var territoriesBoard = new Array(boardSize);
+
+  var myColor = "PLACEHOLDER";
 
   for(var i = 0; i < boardSize; i++) {
   	gameBoard[i] = new Array(boardSize);
@@ -58,6 +61,8 @@ $(function() {
         return
     } 
     else {
+      console.log(data);
+
     	if(data.type == "move" ){
 		  	placePawn(data.x, data.y, data.color);
 		  } else if ( data.type == "sync" ){
@@ -68,12 +73,29 @@ $(function() {
         }
 		  } else if ( data.type == "end" ){
 		  	 console.log("Game ended");
+         var winner = data.winner;
+         var endMessage = "Game over. The winner is player " + winner;
+         var congratulations;
+         if(winner == myColor) {
+          congratulations = "You won!";
+         } else {
+          congratulations = "You lost!";
+         }
+
+         alert(endMessage + '\n' + congratulations);
+      } else if ( data.type == "territories") {
+          moveInfo.innerHTML = "Territories mode";
 		  } else if ( data.type == "go") {
           moveInfo.innerHTML = "Your move!";
           alert("Your move!");
+      } else if (data.type == "dontGo") {
+          moveInfo.innerHTML = "Wait for the opponent to move...";
       } else if (data.type == "prisoners") {
           whitePrisoners = data.white;
           blackPrisoners = data.black;
+      } else if (data.type == "start") {
+          myColor = data.color;
+          gameInfo.innerHTML = "You are player " + myColor;
       }
     }
   }
@@ -84,6 +106,10 @@ $(function() {
   //passButton handling
   passButton.addEventListener('click', function(event) {
   	makeMove(-1,-1,0);
+  });
+
+  surrenderButton.addEventListener('click', function(event) {
+    makeMove(-2, -2, 0);
   });
   
   //detects click on the game board (used for placing stones)
@@ -179,7 +205,7 @@ $(function() {
         }
         
         if(draw === true) {
-          ctx.fillRect((i + 1) * fieldSize - fieldSize/6, (j + 1) * fieldSize - fieldSize/6, fieldSize/3, fieldSize/3);
+          ctx.fillRect((i + 1) * fieldSize - territorySquareSize/2, (j + 1) * fieldSize - territorySquareSize/2, territorySquareSize, territorySquareSize);
         }
       }
     }

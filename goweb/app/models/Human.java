@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import akka.actor.ActorRef;
 import akka.actor.Kill;
 import akka.actor.UntypedActor;
+import models.msgs.DontGo;
 import models.msgs.End;
 import models.msgs.Go;
 import models.msgs.Move;
 import models.msgs.Prisoners;
+import models.msgs.Start;
 import models.msgs.Sync;
 import models.msgs.Territories;
 import play.Logger;
@@ -46,7 +48,6 @@ public class Human extends UntypedActor{
 			}
 		} else if(message instanceof Sync ){
 			Sync s = (Sync ) message;
-			//TODO, this version is for tests only
 			ObjectNode obj = Json.newObject();
 			obj.put("type", "sync");
 			obj.put("territories", s.isTerritories());
@@ -61,17 +62,15 @@ public class Human extends UntypedActor{
 			out.write(obj);
 			
 		} else if (message instanceof End){
-			if(getSender() != table) {				
-				table.tell(message, getSelf());
-			}else {
-				ObjectNode obj = Json.newObject();
-				obj.put("type", "end");
-				out.write(obj);
-			}
-			getSelf().tell(Kill.getInstance(), getSelf());
-			
+			End e = (End)message;
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "end");
+			obj.put("winner", e.getWinner());
+			out.write(obj);
 		} else if (message instanceof Territories ){
-			//start and end territories
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "territories");
+			out.write(obj);
 		} else if (message instanceof Prisoners){
 			Prisoners p = (Prisoners ) message;
 			setWhitePrisoners(p.getWhitePrisoners());
@@ -83,6 +82,16 @@ public class Human extends UntypedActor{
 			ObjectNode obj = Json.newObject();
 			obj.put("type", "go");
 			out.write(obj);
+		} else if (message instanceof DontGo) {
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "dontGo");
+			out.write(obj);
+		} else if (message instanceof Start) {
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "start");
+			String myColorString = myColor == Move.BLACK ? "Black" : "White";
+			obj.put("color", myColorString);
+			out.write(obj	);
 		} else {
 			System.out.println("Unhandled message error");
 		}

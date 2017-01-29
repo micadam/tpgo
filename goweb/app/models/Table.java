@@ -60,25 +60,21 @@ public class Table extends UntypedActor {
 				int color = whitePlayer == null? Move.WHITE : Move.BLACK;
             	ActorRef player =  Akka.system().actorOf(
                         Props.create(Human.class, join.getIn(), join.getOut(), getSelf(),color ));
-            	String text =  "New player entered the game"; 
             	if(whitePlayer == null){
             		
             		whitePlayer = player;
-            		whitePlayer.tell(text, getSelf());
             		if(botMode){
 	            		blackPlayer = Akka.system().actorOf(Props.create(Bot.class, getSelf(),Move.BLACK));
 	            		currentPlayer = blackPlayer;
-	            		Go go = new Go();
-	            		blackPlayer.tell(go, getSelf());			//starts the game 
+	            		notifyCurrentPlayer();
 	            		System.out.println("[Table " + tableName + " ] game started");
             		}
             	}
             	else{
             		blackPlayer = player;
-            		notifyBoth(text);
+            		notifyBoth(new Start());
             		currentPlayer = blackPlayer;
-            		Go go = new Go();
-            		blackPlayer.tell(go, getSelf());			//starts the game 
+            		notifyCurrentPlayer();
             		System.out.println("[Table " + tableName + " ] game started");
             	}  
             	
@@ -109,15 +105,15 @@ public class Table extends UntypedActor {
 				//Double pass handling in here
 				territoriesMode = true;
 				fillTerritories();
+				notifyBoth(new Territories());
 				notifyBoth(new Sync(territoriesBoard, true));
-			} else 
-				passFlag = true;
-			swapPlayers();
+			} else {
+				passFlag = true;				
+				swapPlayers();
+			}
 		} else if ( x == -2 ){ 	//surrender
-			String winner = (currentPlayer == whitePlayer ? "white" : "black");
-			winner = "Game ended, and the winner is " + winner;
-			notifyBoth(winner);
-			notifyBoth(new End());
+			String winner = (currentPlayer == whitePlayer ? "Black" : "White");
+			notifyBoth(new End(winner));
 			endGame();
 		} else if (  x < 0 || y < 0 || x >= boardSize || y >= boardSize ){
 			// Do nothing? XD 
@@ -158,8 +154,29 @@ public class Table extends UntypedActor {
 				blackReady = true;
 			}
 			if(whiteReady && blackReady ){
-				//calculate score
-				notifyBoth(new End());
+				int whiteScore = 0;
+				int blackScore = 0;
+				for(int i = 0; i < boardSize; i++) {
+					for(int j = 0; j < boardSize; j++) {
+						if(territoriesBoard[i][j] == Move.WHITE) {
+							whiteScore++;
+						} else if (territoriesBoard[i][j] == Move.BLACK) {
+							blackScore++;
+						}
+					}
+				}
+				whiteScore += captureRule.getBlackPrisoners();
+				blackScore += captureRule.getWhitePrisoners();
+				String winner;
+				if(whiteScore > blackScore) {
+					winner = "White";
+				} else if (blackScore > whiteScore) {
+					winner = "Black";
+				} else {
+					//draw?
+					winner = "umm";
+				}
+				notifyBoth(new End(winner));
 				endGame();
 				
 				
@@ -184,14 +201,22 @@ public class Table extends UntypedActor {
 		}
 		
 	}
+	
 	private void swapPlayers(){
 		currentPlayer = (currentPlayer == whitePlayer ? blackPlayer : whitePlayer);
-		currentPlayer.tell(new Go(), getSelf());
+		notifyCurrentPlayer();
 	}
 	private void notifyBoth(Object msg){
 		whitePlayer.tell(msg, getSelf());
 		blackPlayer.tell(msg, getSelf());
 	}
+	
+	private void notifyCurrentPlayer() {
+		currentPlayer.tell(new Go(), getSelf());
+		ActorRef notCurrentPlayer = currentPlayer == whitePlayer ? blackPlayer : whitePlayer;
+		notCurrentPlayer.tell(new DontGo(), getSelf());
+	}
+	
 	public void endGame(){
 		territoriesMode = false;
 		currentPlayer = null;
