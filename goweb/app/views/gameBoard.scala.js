@@ -144,6 +144,9 @@ $(function() {
         console.log("here");
         closestX = closestX / fieldSize - 1;
         closestY = closestY / fieldSize - 1;
+
+        closestX = Math.round(closestX);
+        closestY = Math.round(closestY);
         makeMove(closestX, closestY, 1);
     }
   });
