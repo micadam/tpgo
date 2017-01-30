@@ -9,11 +9,17 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
-import akka.actor.Kill;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
-import models.PawnGroupAlgorithm;
-import models.msgs.*;
+import models.msgs.DontGo;
+import models.msgs.End;
+import models.msgs.Go;
+import models.msgs.Join;
+import models.msgs.Move;
+import models.msgs.Prisoners;
+import models.msgs.Start;
+import models.msgs.Sync;
+import models.msgs.Territories;
 import play.libs.Akka;
 import play.mvc.WebSocket;
 import scala.concurrent.Await;
@@ -42,6 +48,7 @@ public class Table extends UntypedActor {
         // Send the Join message to the table
     	ActorRef table = tables.get(name);
     	if(table == null){
+    		System.out.println("new table called " + name );
     		table = Akka.system().actorOf(Props.create(Table.class,name, botMode));
     		tables.put(name, table);
     	}
@@ -145,7 +152,9 @@ public class Table extends UntypedActor {
 		int x = move.x;
 		int y = move.y;
 		//int color = move.color;
-		int color = ((territoriesBoard[x][y] + 2) % 3) - 1; //it should cycle between black white and empty
+		int color = 0;
+		if(x >= 0)
+			color = ((territoriesBoard[x][y] + 2) % 3) - 1; //it should cycle between black white and empty
 		System.out.println("Fill color: " + color);
 		if(x == -1){		//ready
 			//TODO
@@ -221,8 +230,8 @@ public class Table extends UntypedActor {
 	public void endGame(){
 		territoriesMode = false;
 		currentPlayer = null;
-		tables.remove(tableName,this);
-		getSelf().tell(Kill.getInstance(),getSelf());
+		tables.remove(tableName,getSelf());
+		getContext().stop(getSelf());
 	}
 	@Override 
 	public void postStop(){
