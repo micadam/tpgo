@@ -80,7 +80,11 @@ $(function() {
         } else {
           fillTerritories(data.board);
         }
-      } else if ( data.type == "territories") {
+      } else if (data.type == "full") {
+        gameInfo.innerHTML = "Table full!";
+        document.getElementById('board').style.visibility = "hidden";
+        document.getElementById('buttons').style.visibility = "hidden";
+      }else if ( data.type == "territories") {
           moveInfo.innerHTML = "Territories mode";
           passButton.disabled = true;
           whiteReadyString.innerHTML = "NO";

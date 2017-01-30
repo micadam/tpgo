@@ -8,6 +8,7 @@ import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import models.msgs.DontGo;
 import models.msgs.End;
+import models.msgs.Full;
 import models.msgs.Go;
 import models.msgs.Move;
 import models.msgs.Prisoners;
@@ -47,6 +48,11 @@ public class Human extends UntypedActor{
 				obj.put("color", m.color);
 				out.write(obj);
 			}
+		} else if (message instanceof Full) {
+			System.out.println("full!");
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "full");
+			out.write(obj);
 		} else if(message instanceof Sync ){
 			Sync s = (Sync ) message;
 			ObjectNode obj = Json.newObject();

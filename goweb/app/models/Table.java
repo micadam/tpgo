@@ -13,6 +13,7 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import models.msgs.DontGo;
 import models.msgs.End;
+import models.msgs.Full;
 import models.msgs.Go;
 import models.msgs.Join;
 import models.msgs.Move;
@@ -54,8 +55,7 @@ public class Table extends UntypedActor {
     		table = Akka.system().actorOf(Props.create(Table.class,name, botMode));
     		tables.put(name, table);
     	}
-        String result = (String)Await.result(ask(table,new Join(name,in,out), 1000), Duration.create(1, SECONDS)); 
-        System.out.println(result);                     
+    	Await.result(ask(table,new Join(name,in,out), 1000), Duration.create(1, SECONDS));                
     }
 
 	@Override
@@ -63,8 +63,11 @@ public class Table extends UntypedActor {
 		
 		if(message instanceof Join ){
 			Join join = (Join) message;
-			if(blackPlayer != null){		//maximum number of player
-				getSender().tell("FULL",getSelf());
+			if(blackPlayer != null){		//maximum number of players
+				ActorRef player = Akka.system().actorOf(
+                        Props.create(Human.class, join.getIn(), join.getOut(), getSelf(), 1 ));
+				player.tell(new Full(), getSelf());
+				getSender().tell("FULL", getSelf());
 			}else {
 				int color = whitePlayer == null? Move.WHITE : Move.BLACK;
             	ActorRef player =  Akka.system().actorOf(
