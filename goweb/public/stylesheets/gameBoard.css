@@ -1,6 +1,5 @@
 html, body {
   height: 100%;
-  width: 100%;
   background-color: #ffffcc ;
 }
 
@@ -8,7 +7,7 @@ html, body {
   text-align: center;
 }
 
-#buttons {
+.infoBox {
   border: 1px;
   border-style: solid;
   background-color: #dbb25c;
@@ -25,8 +24,7 @@ button {
 }
 
 #board {
-  margin-top: 1%;
-  height: 70%;
+  height: 65%;
 }
 
 #myCanvas {
@@ -44,3 +42,6 @@ h1 {
 h2 {
   font-size: 20px;
   font-family: Sans-Serif;
+ }
+
+  

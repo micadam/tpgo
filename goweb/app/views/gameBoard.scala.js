@@ -8,13 +8,21 @@ $(function() {
   var c = document.getElementById("myCanvas");
   var div = document.getElementById("board");
   var ctx = c.getContext("2d");
-  var passButton = document.getElementById("passButton");
-  var surrenderButton = document.getElementById("surrenderButton");
+
   var gameInfo = document.getElementById('gameInfo');
   var moveInfo = document.getElementById('moveInfo');
+  var readyInfo = document.getElementById('readyInfo');
+  //buttons
+  var passButton = document.getElementById("passButton");
+  var surrenderButton = document.getElementById("surrenderButton");
+  var readyButton = document.getElementById("readyButton");
+  var resumeButton = document.getElementById("resumeButton")
 
   var whitePrisonersNumber = document.getElementById('whitePrisonersNumber');
   var blackPrisonersNumber = document.getElementById('blackPrisonersNumber');
+
+  var whiteReadyString = document.getElementById('whiteReadyInfo');
+  var blackReadyString = document.getElementById('blackReadyInfo');
 
   gameInfo.innerHTML = "Waitng for an opponent...";
   
@@ -74,6 +82,23 @@ $(function() {
         }
       } else if ( data.type == "territories") {
           moveInfo.innerHTML = "Territories mode";
+          passButton.disabled = true;
+          whiteReadyString.innerHTML = "NO";
+          blackReadyString.innerHTML = "NO";
+          readyInfo.style.visibility = "visible";
+      } else if (data.type == "readyState") {
+          whiteReadyString.innerHTML = (data.white == true ? "YES" : "NO");
+          blackReadyString.innerHTML = (data.black == true ? "YES" : "NO");
+
+          if(myColor == "White") {
+            readyButton.innerHTML = (data.white == true ? "Unready" : "Ready");
+          } else {
+            readyButton.innerHTML = (data.black == true ? "Unready" : "Ready");
+          }
+      } else if (data.type == "resume") {
+        passButton.disabled = false;
+        readyInfo.style.visibility = "hidden";
+        alert("Game was resumed. The player who didn't resume goes first now.");
       } else if ( data.type == "go") {
           moveInfo.innerHTML = "Your move!";
           alert("Your move!");
@@ -109,9 +134,18 @@ $(function() {
   	makeMove(-1,-1,0);
   });
 
+  readyButton.addEventListener('click', function(event) {
+    makeMove(-1,-1,0);
+  });
+
   surrenderButton.addEventListener('click', function(event) {
     makeMove(-2, -2, 0);
   });
+
+  resumeButton.addEventListener('click', function(event) {
+    makeMove(-3, -3, 0);
+  });
+  
   
   //detects click on the game board (used for placing stones)
   //calculates the closest spot (but not further than pawnSize/2) and tries to place a stone there

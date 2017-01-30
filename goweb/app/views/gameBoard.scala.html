@@ -14,11 +14,22 @@
     <script type="text/javascript" src="@routes.Application.gameBoardJs(username, bot)"> </script>
   </div>
   
-  <div id = "buttons">
+    
+  <div id = "readyInfo" class="infoBox" style="visibility:hidden">
+    <span id = "readyInfo">
+      <h2>White player ready: <span id = "whiteReadyInfo">NO</span> </br>
+      Black player ready: <span id = "blackReadyInfo">NO</span></h2>
+    </span>
+    
+    <button id = "readyButton" type="button">Ready</button>
+    <button id = "resumeButton" type="button">Resume Game</button>
+  </div>
   
+  <div id = "buttons" class="infoBox">
     <span id = "prisonerInfo"> 
       <h2>White pawns captured: <span id = "whitePrisonersNumber">0</span> </br>
       Black pawns captured: <span id = "blackPrisonersNumber">0</span></h2>
+    </span>
     <button id="passButton" type ="button">Pass</button>
     <button id = "surrenderButton" type = "button">Surrender</button>
   </div>

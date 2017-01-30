@@ -5,13 +5,14 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import akka.actor.ActorRef;
-import akka.actor.Kill;
 import akka.actor.UntypedActor;
 import models.msgs.DontGo;
 import models.msgs.End;
 import models.msgs.Go;
 import models.msgs.Move;
 import models.msgs.Prisoners;
+import models.msgs.ReadyState;
+import models.msgs.Resume;
 import models.msgs.Start;
 import models.msgs.Sync;
 import models.msgs.Territories;
@@ -70,6 +71,17 @@ public class Human extends UntypedActor{
 		} else if (message instanceof Territories ){
 			ObjectNode obj = Json.newObject();
 			obj.put("type", "territories");
+			out.write(obj);
+		} else if (message instanceof ReadyState) {
+			ReadyState rs = (ReadyState)message;
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "readyState");
+			obj.put("white", rs.isWhiteReady());
+			obj.put("black", rs.isBlackReady());
+			out.write(obj);
+		} else if (message instanceof Resume) {
+			ObjectNode obj = Json.newObject();
+			obj.put("type", "resume");
 			out.write(obj);
 		} else if (message instanceof Prisoners){
 			Prisoners p = (Prisoners)message;

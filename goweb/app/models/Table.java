@@ -17,6 +17,8 @@ import models.msgs.Go;
 import models.msgs.Join;
 import models.msgs.Move;
 import models.msgs.Prisoners;
+import models.msgs.ReadyState;
+import models.msgs.Resume;
 import models.msgs.Start;
 import models.msgs.Sync;
 import models.msgs.Territories;
@@ -159,10 +161,13 @@ public class Table extends UntypedActor {
 		if(x == -1){		//ready
 			//TODO
 			if(getSender() == whitePlayer){
-				whiteReady = true;
+				whiteReady = !whiteReady;
 			} else {
-				blackReady = true;
+				blackReady = !blackReady;
 			}
+			
+			notifyBoth(new ReadyState(whiteReady, blackReady));
+			
 			if(whiteReady && blackReady ){
 				int whiteScore = 0;
 				int blackScore = 0;
@@ -188,10 +193,21 @@ public class Table extends UntypedActor {
 				}
 				notifyBoth(new End(winner));
 				endGame();
-				
-				
 			}
-		} else if (  x >= 0 && y >= 0 && x < boardSize && y < boardSize && gameBoard[x][y] == 0 ){
+		} else if (x == -3) {
+			territoriesMode = false;
+			whiteReady = false;
+			blackReady = false;
+			for(int i = 0; i < boardSize; i++) {
+				for(int j = 0; j < boardSize; j++) {
+					territoriesBoard[i][j] = 0;
+				}
+			}
+			notifyBoth(new Resume());
+			currentPlayer = getSender() == whitePlayer ? blackPlayer : whitePlayer;
+			notifyCurrentPlayer();
+		}
+		else if (  x >= 0 && y >= 0 && x < boardSize && y < boardSize && gameBoard[x][y] == 0 ){
 			boolean[][] visited = new boolean[boardSize][boardSize];
 			PawnGroupAlgorithm.getBreathsOfThisGroup(x,y,visited,territoriesBoard,gameBoard,color,0,1);
 			Sync sync = new Sync(territoriesBoard, true);
